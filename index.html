@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diagnóstico Indigo — Evaluá la salud de tu organización</title>
+<title>Diagnóstico Indigo — Evaluá la salud del talento en tu organización</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -523,7 +523,7 @@ const BLOQUES_TAMANO = {
   },
   s2:{
     titulo:'Entre 50 y 100 empleados — El puente organizacional',
-    texto:'Te encontrás en la etapa de transición más desafiante para una empresa: el salto hacia la profesionalización. Las dinámicas de comunicación directa del dueño ya no alcanzan y el área de personas suele estar desbordada atendiendo temas administrativos. Tu gran reto aquí es estructurar y empoderar a los mandos medios. Si tus líderes de equipo no están capacitados para gestionar personas y el clima diario, se convertirán en el principal cuello de botella para cumplir las metas del negocio.'
+    texto:'Te encontrás en la etapa de transición más desafiante para una empresa: el salto hacia la profesionalización. Las dinámicas de comunicación directa del dueño ya no alcanzan y el área de personas suele estar desbordada atendiendo temas administrativos. Tu gran reto aquí es estructurar y empoderar a los mandos medios. Si tus líderes de equipo no están capacitados para gestionar personas y el clima diario, se financierán en el principal cuello de botella para cumplir las metas del negocio.'
   },
   s3:{
     titulo:'Entre 101 y 250 empleados — Alineación y datos',
@@ -583,14 +583,14 @@ const FLAGS_TEXTOS = {
   },
   climaOrganico:{
     label:'Flag activado · Clima orgánico sin medición',
-    texto:'Es positivo que las relaciones diarias fluyan de forma saludable de manera natural, pero la intuición no es escalable. Cuando la empresa sume estructura o atraviese una crisis de mercado, la falta de datos formales sobre el clima te impedirá tomar decisiones preventivas. Lo que no se mide, no se puede mejorar de forma sostenible.'
+    texto:'Es positivo que las relaciones diarias fluyan de forma saludable de manera natural, pero la intuición no es escapable. Cuando la empresa sume estructura o atraviese una crisis de mercado, la falta de datos formales sobre el clima te impedirá tomar decisiones preventivas. Lo que no se mide, no se puede mejorar de forma sostenible.'
   },
 };
 
 /* ============================================================
    GOOGLE APPS SCRIPT INTEGRATION
    ============================================================ */
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby_Oh4ymgEnkj6Ogr5KepqoZkLjAd7zTr9qx90DPq5aEdiUARrYVLN450qOodXK0Vch/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPAnz-XzZc9mCOz7vT9uN675yIe9iW5hDbeMscbOIdzU6vX5fS1bTzK8_NIDlW78Xf/exec';
 
 async function sendToSheet(payload){
   if(APPS_SCRIPT_URL === 'PEGAR_AQUI_TU_URL'){
@@ -909,7 +909,7 @@ function renderResults(){
     <div class="cta-block">
       <span class="eyebrow">Próximo paso</span>
       <h3>${lead.nombre}, conversemos sobre los próximos 90 días de ${lead.empresa}.</h3>
-      <p>Una sesión estratégica de 20 minutos sin costo con el equipo de Indigo Talent Hub, donde traducimos este diagnóstico in un plan de acción concreto, priorizado y a la medida de tu organización.</p>
+      <p>Una sesión estratégica de 20 minutos sin costo con el equipo de Indigo Talent Hub, donde traducimos este diagnóstico en un plan de acción concreto, priorizado y a la medida de tu organización.</p>
       <div class="cta-buttons">
         <a href="mailto:juan@indigotalent.com?subject=Sesión%20estratégica%20-%20${encodeURIComponent(lead.empresa)}&body=Hola%20Juan%2C%0A%0AAcabo%20de%20completar%20el%20Diagnóstico%20Indigo%20y%20quiero%20agendar%20una%20sesión%20estratégica%20para%20revisar%20los%20resultados%20de%20${encodeURIComponent(lead.empresa)}.%0A%0ASaludos%2C%0A${encodeURIComponent(lead.nombre)}" class="btn btn-primary">Agendar sesión estratégica gratuita <span class="btn-arrow">→</span></a>
         <button class="btn btn-ghost print-btn" onclick="window.print()">Descargar reporte en PDF</button>
@@ -922,5 +922,3 @@ function renderResults(){
 </script>
 </body>
 </html>
-
-Acá está el código definitivo entero que me mandaste recién. El tema es que me perdí de donde cambiar la URL. Decime en qué línea exacta está o pasame el código con el cambio de URL para copiar y pegar entero de nuevo si es más rápido. Mi URL nueva de google es esta: https://script.google.com/macros/s/AKfycbwPAnz-XzZc9mCOz7vT9uN675yIe9iW5hDbeMscbOIdzU6vX5fS1bTzK8_NIDlW78Xf/exec
