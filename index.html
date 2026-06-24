@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diagnóstico Indigo — Evaluá la salud de tu organización</title>
+<title>Diagnóstico Indigo — Evaluá la salud del talento en tu organización</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -257,15 +257,43 @@
   .footer-note{margin-top:32px;font-size:12px;color:var(--muted);text-align:center}
   .footer-note a{color:var(--navy);text-decoration:none;border-bottom:1px solid var(--line-strong)}
 
-  /* Print */
+  /* ============================================================
+     SISTEMA DE IMPRESIÓN EXCLUSIVO (PDF PREMIUM RE-DISEÑADO)
+     ============================================================ */
   @media print{
-    body{background:#fff}
-    .topbar, .progress, .cta-buttons .btn-ghost.print-btn, .no-print{display:none !important}
-    .container{padding:0;max-width:100%}
-    .results-header, .score-block, .report-section, .cta-block{
-      box-shadow:none;border:1px solid #ddd;page-break-inside:avoid;
+    @page {
+      margin: 0; /* Borra fecha, hora, título y URL automáticos de los navegadores */
     }
-    .score-block{background:#030536 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body{
+      background: var(--cream) !important; /* Fuerza a mantener el fondo original crema */
+      padding: 50px 40px; /* Margen de cortesía para que respire al imprimirse */
+      -webkit-print-color-adjust: exact !important; 
+      print-color-adjust: exact !important;
+    }
+    .topbar, .progress, .no-print, .cta-buttons {
+      display: none !important; /* Oculta barras interactivas y botoneras de acción web */
+    }
+    .container{
+      padding: 0;
+      max-width: 100%;
+    }
+    .results-header, .score-block, .report-section, .cta-block{
+      box-shadow: var(--shadow) !important;
+      border: 1px solid var(--line) !important;
+      page-break-inside: avoid; /* Bloquea cortes feos de párrafos entre hojas */
+    }
+    .score-block{
+      background: var(--navy) !important;
+    }
+    .cta-block {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%) !important;
+    }
+    /* Mantiene los colores corporativos de los gráficos de barra en el PDF */
+    .breakdown-item-graph { background: #fff !important; border: 1px solid var(--line) !important; }
+    .b-graph-track { background: rgba(3, 5, 54, 0.06) !important; }
+    .bar-madura { background: #1f6b46 !important; }
+    .bar-intermedia { background: var(--orange) !important; }
+    .bar-critica { background: var(--coral) !important; }
   }
 </style>
 </head>
@@ -388,7 +416,7 @@ const PREGUNTAS = [
   {
     id:'q1', area:'Reclutamiento y Selección',
     title:'Reclutamiento y Selección',
-    text:'Pensando en time-to-hire y atracción de talento, ¿cuál de estas frases describe mejor tu realidad hoy?',
+    text:'Pensando en time-to-hire y atracción de talento, ¿cuál de estas frases describe mejor tu reality hoy?',
     options:[
       {tag:'Madura', class:'madura', points:3, text:'Contamos con procesos ágiles apoyados en tecnología (ATS/IA), un employer branding sólido y cubrimos las vacantes clave a tiempo con talento alineado a la cultura.'},
       {tag:'Intermedia', class:'intermedia', points:2, text:'Cubrimos las posiciones, pero el proceso suele ser reactivo, largo, con comunicación poco fluida y dependemos excesivamente de consultoras externas para perfiles críticos.'},
@@ -508,7 +536,7 @@ const BLOQUES_INDUSTRIA = {
   },
   banca:{
     titulo:'Banca, Finanzas Tradicionales y Seguros',
-    texto:'El sector financiero tradicional se encuentra en medio de una reestructuración profunda y dolorosa debido a la digitalización masiva. Tu dolor de personas número uno es el reskilling o la salida ordenada de miles de empleados cuyas tareas operativas quedaron obsoletas, mientras intentás asimilar una cultura ágil que atraiga al talento digital que hoy prefiere las Fintech. Si RR.HH. se mantiene aislado en tareas de soporte legal y liquidación, la resistencia al cambio cultural frenará la transformación digital que exige el negocio para sobrevivir.'
+    texto:'El sector financiero tradicional se encuentra en medio de una reestructuración profunda y dolorosa debido a la digitalización masiva. Tu dolor de personas número uno es el reskilling o la salida ordenada de miles de empleados cuyas tareas operativas quedaron obsoletas, mientras intentás asimilar una cultura ágil que atraiga al talento digital que hoy prefiere las Fintech. Si RR.HH. se mantiene aislado en tareas de soporte legal and liquidación, la resistencia al cambio cultural frenará la transformación digital que exige el negocio para sobrevivir.'
   },
   otro:{
     titulo:'Tu sector',
@@ -523,7 +551,7 @@ const BLOQUES_TAMANO = {
   },
   s2:{
     titulo:'Entre 50 y 100 empleados — El puente organizacional',
-    texto:'Te encontrás en la etapa de transición más desafiante para una empresa: el salto hacia la profesionalización. Las dinámicas de comunicación directa del dueño ya no alcanzan y el área de personas suele estar desbordada atendiendo temas administrativos. Tu gran reto aquí es estructurar y empoderar a los mandos medios. Si tus líderes de equipo no están capacitados para gestionar personas y el clima diario, se financierán en el principal cuello de botella para cumplir las metas del negocio.'
+    texto:'Te encontrás en la etapa de transición más desafiante para una empresa: el salto hacia la profesionalización. Las dinámicas de comunicación directa del dueño ya no alcanzan y el área de personas suele estar desbordada atendiendo temas administrativos. Tu gran reto aquí es estructurar y empoderar a los mandos medios. Si tus líderes de equipo no están capacitados para gestionar personas y el clima diario, se convertirán en el principal cuello de botella para cumplir las metas del negocio.'
   },
   s3:{
     titulo:'Entre 101 y 250 empleados — Alineación y datos',
@@ -583,18 +611,18 @@ const FLAGS_TEXTOS = {
   },
   climaOrganico:{
     label:'Flag activado · Clima orgánico sin medición',
-    texto:'Es positivo que las relaciones diarias fluyan de forma saludable de manera natural, pero la intuición no es escapable. Cuando la empresa sume estructura o atraviese una crisis de mercado, la falta de datos formales sobre el clima te impedirá tomar decisiones preventivas. Lo que no se mide, no se puede mejorar de forma sostenible.'
+    texto:'Es positivo que las relaciones diarias fluyan de forma saludable de manera natural, pero la intuición no es escalable. Cuando la empresa sume estructura o atraviese una crisis de mercado, la falta de datos formales sobre el clima te impedirá tomar decisiones preventivas. Lo que no se mide, no se puede mejorar de forma sostenible.'
   },
 };
 
 /* ============================================================
-   GOOGLE APPS SCRIPT INTEGRATION
+   GOOGLE APPS SCRIPT INTEGRATION (URL CONFIRMADA)
    ============================================================ */
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPAnz-XzZc9mCOz7vT9uN675yIe9iW5hDbeMscbOIdzU6vX5fS1bTzK8_NIDlW78Xf/exec';
 
 async function sendToSheet(payload){
   if(APPS_SCRIPT_URL === 'PEGAR_AQUI_TU_URL'){
-    console.warn('[Sheet] URL no configurado — los datos no se están guardando.');
+    console.warn('[Sheet] URL no configurada — los datos no se están guardando.');
     return;
   }
   try{
@@ -858,7 +886,7 @@ function renderResults(){
 
   document.getElementById('resultsContent').innerHTML = `
     <div class="results-header">
-      <span class="eyebrow">Reporte Ejecutivo · Indigo Talent Hub</span>
+      <span class="eyebrow">Reporte Ejecutivo de Talento · Indigo</span>
       <h1>${lead.nombre}, este es el diagnóstico de ${lead.empresa}.</h1>
       <div class="meta-row">
         <span><strong>Fecha:</strong> ${fechaHoy}</span>
@@ -911,12 +939,12 @@ function renderResults(){
       <h3>${lead.nombre}, conversemos sobre los próximos 90 días de ${lead.empresa}.</h3>
       <p>Una sesión estratégica de 20 minutos sin costo con el equipo de Indigo Talent Hub, donde traducimos este diagnóstico en un plan de acción concreto, priorizado y a la medida de tu organización.</p>
       <div class="cta-buttons">
-        <a href="mailto:juan@indigotalent.com?subject=Sesión%20estratégica%20-%20${encodeURIComponent(lead.empresa)}&body=Hola%20Juan%2C%0A%0AAcabo%20de%20completar%20el%20Diagnóstico%20Indigo%20y%20quiero%20agendar%20una%20sesión%20estratégica%20para%20revisar%20los%20resultados%20de%20${encodeURIComponent(lead.empresa)}.%0A%0ASaludos%2C%0A${encodeURIComponent(lead.nombre)}" class="btn btn-primary">Agendar sesión estratégica gratuita <span class="btn-arrow">→</span></a>
-        <button class="btn btn-ghost print-btn" onclick="window.print()">Descargar reporte en PDF</button>
+        <a href="mailto:juan@indigotalent.com?subject=Sesión%20estratégica%20-%20${encodeURIComponent(lead.empresa)}&body=Hola%20Juan%2C%0A%0AAcabo%20de%20completar%20el%20Diagnóstico%20Indigo%20y%20quiero%20agendar%20una%20sesión%20estratégica%20para%20revisar%20los%20resultados%20de%20${encodeURIComponent(lead.empresa)}.%0A%0ASaludos%2C%0A${encodeURIComponent(lead.nombre)}" class="btn btn-primary no-print">Agendar sesión estratégica gratuita <span class="btn-arrow">→</span></a>
+        <button class="btn btn-ghost print-btn no-print" onclick="window.print()">Descargar reporte en PDF</button>
       </div>
     </div>
 
-    <p class="footer-note">Diagnóstico Indigo Talent Hub © ${new Date().getFullYear()} · Indigo Talent Hub · Buenos Aires, Argentina</p>
+    <p class="footer-note">Diagnóstico Indigo © ${new Date().getFullYear()} · Indigo Talent Hub · Buenos Aires, Argentina</p>
   `;
 }
 </script>
