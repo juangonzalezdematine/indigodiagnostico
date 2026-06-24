@@ -465,7 +465,7 @@ const PREGUNTAS = [
     text:'¿Qué rol juega el área de personas frente a la mesa directiva?',
     options:[
       {tag:'Madura', class:'madura', points:3, text:'Socio estratégico (Business Partner): el equipo de RR.HH. entiende a fondo el negocio, habla el lenguaje de los números y codiseña la estrategia junto a la mesa directiva.'},
-      {tag:'Intermedia', class:'intermedia', points:2, text:'Funcional / reactivo: RR.HH. está alineado a las necesidades operativas de las áreas and responde bien cuando se lo solicita, pero rara vez propone iniciativas proactivas.'},
+      {tag:'Intermedia', class:'intermedia', points:2, text:'Funcional / reactivo: RR.HH. está alineado a las necesidades operativas de las áreas y responde bien cuando se lo solicita, pero rara vez propone iniciativas proactivas.'},
       {tag:'Crítica', class:'critica', points:1, text:'Aislado administrativo: muy enfocado en soporte, liquidación y relaciones laborales rígidas, con una desconexión evidente respecto a los objetivos de facturación y mercado.'},
     ]
   },
@@ -615,8 +615,8 @@ async function sendToSheet(payload){
 
 const state = {
   step:0,
-  total: SEGMENTACION.length + PREGUNTAS.length, // 3 + 9 = 12
-  answers:{},  // {industria, tamano, rol, q1...q9 (con {points, tag, flag, value})}
+  total: SEGMENTACION.length + PREGUNTAS.length, 
+  answers:{},  
   lead:{},
 };
 
@@ -754,6 +754,7 @@ function submitLead(){
   };
 
   const {total, perfil} = calcScore();
+  
   const payload = {
     nombre: state.lead.nombre,
     email: state.lead.email,
@@ -763,7 +764,17 @@ function submitLead(){
     rol: state.answers.rol,
     puntaje: total,
     perfil: BLOQUES_PERFIL[perfil].titulo,
+    q1: state.answers.q1?.tag || "No respondido",
+    q2: state.answers.q2?.tag || "No respondido",
+    q3: state.answers.q3?.tag || "No respondido",
+    q4: state.answers.q4?.tag || "No respondido",
+    q5: state.answers.q5?.tag || "No respondido",
+    q6: state.answers.q6?.tag || "No respondido", 
+    q7: state.answers.q7?.tag || "No respondido",
+    q8: state.answers.q8?.tag || "No respondido",
+    q9: state.answers.q9?.tag || "No respondido"
   };
+  
   sendToSheet(payload);
 
   renderResults();
