@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico Indigo — Evaluá la salud del talento en tu organización</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#030536;
+    --navy-soft:#1a1d52;
+    --coral:#E55739;
+    --cream:#FFFCF3;
+    --orange:#F5A63F;
+    --ink:#0a0a18;
+    --muted:#6b6e85;
+    --line:rgba(3,5,54,0.12);
+    --line-strong:rgba(3,5,54,0.22);
+    --shadow: 0 1px 2px rgba(3,5,54,0.04), 0 8px 32px rgba(3,5,54,0.06);
+    --radius:14px;
+    --radius-sm:10px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .display{font-family:'Fraunces',Georgia,serif;font-weight:500;letter-spacing:-0.02em;line-height:1.05}
+  .eyebrow{
+    font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--coral);font-weight:600;
+  }
+  .container{max-width:880px;margin:0 auto;padding:48px 24px 96px}
+  .topbar{
+    max-width:880px;margin:0 auto;padding:24px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid var(--line);
+  }
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--navy);font-size:15px;letter-spacing:-0.01em}
+  .logo-mark{width:26px;height:26px;border-radius:50%;background:var(--navy);position:relative}
+  .logo-mark::after{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--coral)}
+  .step-label{font-size:12px;color:var(--muted);font-weight:500}
+
+  /* Screens */
+  .screen{display:none;animation:fade .35s ease}
+  .screen.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* Hero */
+  .hero{padding:32px 0 24px}
+  .hero .eyebrow{margin-bottom:18px;display:inline-block}
+  .hero h1{font-size:clamp(40px,6vw,68px);margin:0 0 20px;color:var(--navy)}
+  .hero h1 em{font-style:italic;color:var(--coral);font-weight:500}
+  .hero p.lead{font-size:18px;color:var(--muted);max-width:620px;margin:0 0 36px}
+  .hero-meta{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+    margin:40px 0;padding:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  }
+  .hero-meta div{font-size:13px;color:var(--muted)}
+  .hero-meta strong{display:block;color:var(--navy);font-size:22px;font-family:'Fraunces',serif;font-weight:500;margin-bottom:2px}
+  @media(max-width:640px){.hero-meta{grid-template-columns:1fr;gap:14px;padding:18px 0}.hero-meta div{display:flex;align-items:baseline;gap:10px}.hero-meta strong{font-size:18px}}
+
+  /* Buttons */
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;justify-content:center;
+    padding:16px 28px;border-radius:999px;border:0;cursor:pointer;
+    font-family:inherit;font-size:15px;font-weight:600;letter-spacing:-0.005em;
+    transition:transform .12s ease, box-shadow .2s ease, background .2s ease;
+    text-decoration:none;
+  }
+  .btn-primary{background:var(--coral);color:#fff}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(229,87,57,0.3)}
+  .btn-dark{background:var(--navy);color:#fff}
+  .btn-dark:hover{background:var(--navy-soft);transform:translateY(-1px)}
+  .btn-ghost{background:transparent;color:var(--navy);border:1px solid var(--line-strong)}
+  .btn-ghost:hover{border-color:var(--navy);background:rgba(3,5,54,0.03)}
+  .btn-arrow{font-size:18px;line-height:1}
+
+  /* Progress */
+  .progress{
+    max-width:880px;margin:0 auto;padding:16px 24px 0;
+    display:flex;align-items:center;gap:14px;
+  }
+  .progress-bar{flex:1;height:3px;background:var(--line);border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:var(--coral);transition:width .35s ease;border-radius:3px}
+  .progress-text{font-size:12px;color:var(--muted);font-weight:500;white-space:nowrap}
+
+  /* Question card */
+  .q-step{padding:48px 0 0}
+  .q-step .eyebrow{margin-bottom:14px;display:inline-block}
+  .q-step h2{font-size:clamp(26px,3.4vw,36px);color:var(--navy);margin:0 0 32px;max-width:680px}
+  .q-step h2 .display{font-family:'Fraunces',serif;font-weight:500}
+  .options{display:flex;flex-direction:column;gap:12px}
+  .option{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px 22px;cursor:pointer;
+    transition:border-color .15s ease, transform .12s ease, box-shadow .2s ease;
+    display:flex;gap:16px;align-items:flex-start;
+    text-align:left;font:inherit;color:inherit;width:100%;
+  }
+  .option:hover{border-color:var(--navy);transform:translateY(-1px);box-shadow:var(--shadow)}
+  .option.selected{border-color:var(--coral);border-width:2px;padding:19px 21px}
+  .option-tag{
+    font-size:10px;font-weight:700;letter-spacing:0.12em;
+    padding:4px 9px;border-radius:999px;flex-shrink:0;
+    background:rgba(3,5,54,0.06);color:var(--navy);
+  }
+  .option-tag.madura{background:rgba(40,140,90,0.12);color:#1f6b46}
+  .option-tag.intermedia{background:rgba(245,166,63,0.18);color:#9c5a00}
+  .option-tag.critica{background:rgba(229,87,57,0.14);color:#a8341b}
+  .option-tag.especial{background:rgba(3,5,54,0.08);color:var(--navy-soft)}
+  .option-text{flex:1;font-size:15px;line-height:1.55}
+
+  .q-nav{margin-top:32px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+  .q-nav .back{background:transparent;border:0;color:var(--muted);cursor:pointer;font:inherit;font-size:14px;padding:8px 0}
+  .q-nav .back:hover{color:var(--navy)}
+
+  /* Form */
+  .form-step{padding:48px 0 0}
+  .form-step h2{font-size:clamp(28px,3.6vw,38px);color:var(--navy);margin:0 0 12px}
+  .form-step p.sub{color:var(--muted);margin:0 0 32px;max-width:560px}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:640px}
+  @media(max-width:640px){.form-grid{grid-template-columns:1fr}}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field.full{grid-column:1/-1}
+  .field label{font-size:12px;font-weight:600;color:var(--navy);letter-spacing:0.02em}
+  .field input, .field select{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);
+    padding:13px 14px;font:inherit;font-size:15px;color:var(--ink);
+    transition:border-color .15s ease;
+  }
+  .field input:focus, .field select:focus{outline:0;border-color:var(--navy)}
+  .field .err{font-size:12px;color:var(--coral);margin-top:2px;display:none}
+  .field.has-error input, .field.has-error select{border-color:var(--coral)}
+  .field.has-error .err{display:block}
+  .privacy{font-size:12px;color:var(--muted);margin-top:18px;max-width:560px}
+
+  /* Results */
+  .results{padding:32px 0 0}
+  .results-header{
+    border-top:6px solid var(--coral);
+    background:#fff;padding:36px 36px 32px;border-radius:var(--radius);box-shadow:var(--shadow);
+    margin-bottom:24px;
+  }
+  @media(max-width:640px){.results-header{padding:24px}}
+  .results-header .eyebrow{margin-bottom:12px;display:inline-block}
+  .results-header h1{
+    font-family:'Fraunces',serif;font-weight:500;
+    font-size:clamp(28px,4vw,42px);color:var(--navy);margin:0 0 8px;line-height:1.1;letter-spacing:-0.02em;
+  }
+  .results-header .meta-row{display:flex;flex-wrap:wrap;gap:18px;margin-top:18px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  .results-header .meta-row span strong{color:var(--navy);font-weight:600}
+
+  .score-block{
+    background:var(--navy);color:#fff;border-radius:var(--radius);
+    padding:32px 36px;margin-bottom:24px;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;
+  }
+  @media(max-width:640px){.score-block{grid-template-columns:1fr;padding:24px}}
+  .score-circle{
+    width:120px;height:120px;border-radius:50%;border:3px solid var(--coral);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .score-circle .num{font-family:'Fraunces',serif;font-size:42px;font-weight:600;line-height:1}
+  .score-circle .denom{font-size:11px;opacity:0.6;margin-top:4px;letter-spacing:0.1em}
+  .score-info .label{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--orange);font-weight:600;margin-bottom:6px}
+  .score-info h2{font-family:'Fraunces',serif;font-weight:500;font-size:32px;margin:0 0 8px;letter-spacing:-0.01em}
+  .score-info p{margin:0;opacity:0.85;font-size:15px;max-width:480px}
+
+  .report-section{
+    background:#fff;border-radius:var(--radius);padding:32px 36px;margin-bottom:20px;
+    border:1px solid var(--line);
+  }
+  @media(max-width:640px){.report-section{padding:24px}}
+  .report-section h3{
+    font-family:'Fraunces',serif;font-weight:500;font-size:22px;color:var(--navy);
+    margin:0 0 14px;letter-spacing:-0.01em;
+  }
+  .report-section h3 .num{
+    display:inline-block;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;
+    color:var(--coral);letter-spacing:0.15em;margin-right:10px;vertical-align:middle;
+  }
+  .report-section p{margin:0 0 12px;font-size:15px;color:#2a2c45;line-height:1.65}
+  .report-section p:last-child{margin-bottom:0}
+
+  .flag-box{
+    background:rgba(245,166,63,0.08);border-left:3px solid var(--orange);
+    padding:16px 20px;border-radius:6px;margin-top:14px;
+  }
+  .flag-box .flag-label{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#9c5a00;font-weight:700;margin-bottom:6px}
+  .flag-box p{margin:0;font-size:14px;color:#3a2a10}
+
+  .breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:18px}
+  .breakdown-item{
+    background:var(--cream);border:1px solid var(--line);border-radius:var(--radius-sm);
+    padding:12px 14px;font-size:12px;
+  }
+  .breakdown-item .b-label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
+  .breakdown-item .b-val{font-weight:600;color:var(--navy);font-size:14px}
+  .breakdown-item .b-val .b-pts{font-size:11px;color:var(--muted);font-weight:500;margin-left:4px}
+
+  .cta-block{
+    background:linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
+    color:#fff;border-radius:var(--radius);padding:40px 36px;margin-top:24px;text-align:center;
+  }
+  @media(max-width:640px){.cta-block{padding:28px 24px}}
+  .cta-block .eyebrow{color:var(--orange);margin-bottom:10px;display:inline-block}
+  .cta-block h3{font-family:'Fraunces',serif;font-weight:500;font-size:28px;margin:0 0 10px;line-height:1.15}
+  .cta-block p{margin:0 0 28px;opacity:0.85;max-width:520px;margin-left:auto;margin-right:auto;font-size:15px}
+  .cta-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .cta-buttons .btn-ghost{color:#fff;border-color:rgba(255,255,255,0.3)}
+  .cta-buttons .btn-ghost:hover{background:rgba(255,255,255,0.1);border-color:#fff}
+
+  .footer-note{margin-top:32px;font-size:12px;color:var(--muted);text-align:center}
+  .footer-note a{color:var(--navy);text-decoration:none;border-bottom:1px solid var(--line-strong)}
+
+  /* Print */
+  @media print{
+    body{background:#fff}
+    .topbar, .progress, .cta-buttons .btn-ghost.print-btn, .no-print{display:none !important}
+    .container{padding:0;max-width:100%}
+    .results-header, .score-block, .report-section, .cta-block{
+      box-shadow:none;border:1px solid #ddd;page-break-inside:avoid;
+    }
+    .score-block{background:#030536 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar no-print">
+  <div class="logo"><span class="logo-mark"></span>Indigo Talent Hub</div>
+  <div class="step-label" id="stepLabel">Diagnóstico de Talento</div>
+</div>
+
+<div class="progress no-print" id="progressWrap" style="display:none">
+  <span class="progress-text" id="progressText">Paso 1 de 12</span>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+</div>
+
+<main class="container">
+
+  <!-- LANDING -->
+  <section class="screen active" id="screen-landing">
+    <div class="hero">
+      <span class="eyebrow">Diagnóstico Indigo · 2026</span>
+      <h1 class="display">Evaluá la salud del talento en <em>tu organización</em>.</h1>
+      <p class="lead">Un diagnóstico ejecutivo de 9 preguntas que cruza la madurez de tu gestión de personas con los dolores reales de tu industria y el momento estructural de tu empresa. Pensado para fundadores, CEOs y líderes de RR.HH. que quieren decisiones con foco, no más planillas.</p>
+      <button class="btn btn-primary" onclick="startTest()">Comenzar diagnóstico <span class="btn-arrow">→</span></button>
+      <div class="hero-meta">
+        <div><strong>~5 min</strong>Tiempo estimado de respuesta</div>
+        <div><strong>9 preguntas</strong>Cruzadas por industria y tamaño</div>
+        <div><strong>Reporte ejecutivo</strong>Personalizado y descargable</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEGMENTATION + QUESTIONS render dynamically -->
+  <section class="screen" id="screen-questions">
+    <div class="q-step" id="qStep"></div>
+  </section>
+
+  <!-- LEAD FORM -->
+  <section class="screen" id="screen-form">
+    <div class="form-step">
+      <span class="eyebrow">Último paso</span>
+      <h2 class="display">Para enviarte tu reporte ejecutivo personalizado.</h2>
+      <p class="sub">Generamos un análisis cruzado con los dolores específicos de tu industria y el momento estructural de tu empresa. Solo necesitamos tres datos.</p>
+      <form id="leadForm" onsubmit="event.preventDefault(); submitLead(); return false;">
+        <div class="form-grid">
+          <div class="field full">
+            <label for="f-nombre">Nombre completo</label>
+            <input type="text" id="f-nombre" name="nombre" required>
+            <span class="err">Completá tu nombre</span>
+          </div>
+          <div class="field full">
+            <label for="f-email">Email corporativo</label>
+            <input type="email" id="f-email" name="email" required>
+            <span class="err">Ingresá un email válido</span>
+          </div>
+          <div class="field full">
+            <label for="f-empresa">Nombre de la empresa</label>
+            <input type="text" id="f-empresa" name="empresa" required>
+            <span class="err">Completá el nombre de la empresa</span>
+          </div>
+        </div>
+        <div class="q-nav">
+          <button type="button" class="back" onclick="goBack()">← Volver</button>
+          <button type="button" class="btn btn-primary" onclick="submitLead()">Generar diagnóstico <span class="btn-arrow">→</span></button>
+        </div>
+        <p class="privacy">Tus datos se usan únicamente para generar este reporte y para que el equipo de Indigo pueda contactarte si así lo solicitás. No compartimos información con terceros.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="screen" id="screen-results">
+    <div class="results" id="resultsContent"></div>
+  </section>
+
+</main>
+
+<script>
+/* ============================================================
+   DATA: Segmentación + 9 preguntas + bloques
+   ============================================================ */
+
+const SEGMENTACION = [
+  {
+    id:'industria',
+    label:'¿En qué industria opera tu empresa?',
+    type:'select',
+    options:[
+      {v:'tech', t:'Tecnología, Fintech, EdTech y Soluciones Digitales'},
+      {v:'servicios', t:'Servicios Profesionales (Consultoría, Legal, Agencias, BPO, IT)'},
+      {v:'retail', t:'Retail, E-commerce y Logística (última milla, distribución)'},
+      {v:'consumo', t:'Consumo Masivo y Manufactura Liviana'},
+      {v:'energia', t:'Energía, Minería, Infraestructura, Servicios Públicos e Industria Pesada'},
+      {v:'pharma', t:'Pharma, Salud y Biotecnología'},
+      {v:'banca', t:'Banca, Finanzas Tradicionales y Seguros'},
+      {v:'otro', t:'Otro'},
+    ]
+  },
+  {
+    id:'tamano',
+    label:'¿Cuál es el tamaño de tu empresa?',
+    type:'select',
+    options:[
+      {v:'s1', t:'Hasta 50 empleados'},
+      {v:'s2', t:'Entre 50 y 100 empleados'},
+      {v:'s3', t:'Entre 101 y 250 empleados'},
+      {v:'s4', t:'Entre 251 y 500 empleados'},
+      {v:'s5', t:'Más de 500 empleados'},
+    ]
+  },
+  {
+    id:'rol',
+    label:'¿Cuál es tu rol en la organización?',
+    type:'select',
+    options:[
+      {v:'fundador', t:'Dueño / Fundador'},
+      {v:'ceo', t:'CEO / Director General / C-Level'},
+      {v:'rrhh', t:'Director / Gerente de RR.HH.'},
+    ]
+  },
+];
+
+const PREGUNTAS = [
+  {
+    id:'q1', area:'Reclutamiento y Selección',
+    title:'Reclutamiento y Selección',
+    text:'Pensando en time-to-hire y atracción de talento, ¿cuál de estas frases describe mejor tu realidad hoy?',
+    options:[
+      {tag:'Madura', class:'madura', points:3, text:'Contamos con procesos ágiles apoyados en tecnología (ATS/IA), un employer branding sólido y cubrimos las vacantes clave a tiempo con talento alineado a la cultura.'},
+      {tag:'Intermedia', class:'intermedia', points:2, text:'Cubrimos las posiciones, pero el proceso suele ser reactivo, largo, con comunicación poco fluida y dependemos excesivamente de consultoras externas para perfiles críticos.'},
+      {tag:'Crítica', class:'critica', points:1, text:'No hay un proceso generalizado, nos cuesta atraer talento calificado, los procesos duran muchísimo, la comunicación entre áreas es casi nula y sufrimos caídas durante el proceso, en la oferta o en los primeros 90 días.'},
+      {tag:'Especial', class:'especial', points:2, flag:'sinNecesidad', text:'Sin necesidad activa: la empresa funciona a capacidad plena con su estructura consolidada y no presenta necesidades activas de incorporación en el corto plazo.'},
+    ]
+  },
+  {
+    id:'q2', area:'Rotación y Retención',
+    title:'Rotación y Retención de Talento',
+    text:'Sobre cómo se mueve (o no) el talento dentro de tu organización, ¿con cuál te identificás más?',
+    options:[
+      {tag:'Madura', class:'madura', points:3, text:'La rotación está bajo control (dentro del target de la industria), medimos las causas reales de salida y ejecutamos planes preventivos de retención.'},
+      {tag:'Intermedia', class:'intermedia', points:2, text:'Monitoreamos el índice de rotación, pero reaccionamos cuando el talento clave ya presentó su renuncia. Las salidas nos toman por sorpresa.'},
+      {tag:'Crítica', class:'critica', points:1, text:'Sufrimos una fuga constante de know-how en posiciones estratégicas. No tenemos claridad de por qué se va la gente y el costo de reemplazarla afecta el margen del negocio.'},
+      {tag:'Especial', class:'especial', points:2, flag:'rotacionPasiva', text:'Baja rotación pasiva: prácticamente no tenemos rotación, principalmente por estabilidad salarial o dotación envejecida y de alta antigüedad, más que por una gestión activa.'},
+    ]
+  },
+  {
+    id:'q3', area:'Clima, Cultura y Compromiso',
+    title:'Clima, Cultura y Compromiso',
+    text:'En relación al pulso interno de tu organización, ¿qué describe mejor cómo lo gestionan?',
+    options:[
+      {tag:'Madura', class:'madura', points:3, text:'Evaluamos el pulso de la organización constantemente (eNPS/clima), y los líderes accionan planes concretos junto a sus equipos para mantener el compromiso alto.'},
+      {tag:'Intermedia', class:'intermedia', points:2, text:'Realizamos la típica encuesta anual de clima. Compartimos los resultados, pero los planes de acción se diluyen a los pocos meses por la urgencia del día a día.'},
+      {tag:'Crítica', class:'critica', points:1, text:'No medimos el clima o el ambiente se percibe tenso. El burnout y la falta de compromiso son evidentes, impactando directamente en la productividad.'},
+      {tag:'Especial', class:'especial', points:2, flag:'climaOrganico', text:'Orgánica: no hacemos mediciones formales de clima ni cultura, pero se percibe un buen ambiente y las relaciones diarias fluyen de manera saludable.'},
+    ]
+  },
+  {
+    id:'q4', area:'Presupuesto y ROI de RR.HH.',
+    title:'Presupuesto y Decisiones Basadas en Datos',
+    text:'Sobre cómo se planifica y mide la inversión en gestión de personas:',
+    options:[
+      {tag:'Madura', class:'madura', points:3, text:'El presupuesto de RR.HH. se asigna estratégicamente (balanceando compensación, desarrollo y bienestar) y medimos el retorno con indicadores claros (People Analytics).'},
+      {tag:'Intermedia', class:'intermedia', points:2, text:'El presupuesto se calcula repitiendo el del año anterior con ajustes por inflación. RR.HH. es visto más como un centro de costos operativo que estratégico.'},
+      {tag:'Crítica', class:'critica', points:1, text:'No existe un presupuesto formal para la gestión de personas. Cada iniciativa o ajuste salarial requiere una negociación reactiva y desgastante con Finanzas.'},
+    ]
+  },
+  {
+    id:'q5', area:'Desarrollo y Liderazgo',
+    title:'Desarrollo, Reskilling y Liderazgo',
+    text:'Pensando en cómo se forma y se proyecta al equipo hacia adelante:',
+    options:[
+      {tag:'Madura', class:'madura', points:3, text:'Contamos con planes de sucesión para puestos clave y programas activos para actualizar las competencias del equipo frente a los avances tecnológicos y del mercado.'},
+      {tag:'Intermedia', class:'intermedia', points:2, text:'Hay capacitaciones puntuales e individuales para responder a demandas de negocio específicas, pero sin un plan de desarrollo estructurado ni una línea de sucesión clara.'},
+      {tag:'Crítica', class:'critica', points:1, text:'No existen planes de carrera ni evaluaciones de desempeño. Los líderes gestionan "como pueden" y los colaboradores manifiestan estancamiento profesional.'},
+    ]
+  },
+  {
+    id:'q6', area:'Dinámica del Headcount',
+    title:'Dinámica y Evolución del Headcount',
+    text:'¿Cuál es la situación actual de tu dotación?',
+    contextOnly:true,
+    options:[
+      {tag:'Estable', class:'especial', points:0, value:'estable', text:'Estable: nos mantenemos sin cambios abruptos en la dotación; la estructura actual responde bien al ritmo del negocio.'},
+      {tag:'Crecimiento', class:'especial', points:0, value:'crecimiento', text:'Crecimiento o adquisición: estamos en expansión acelerada o integrando equipos por fusiones/adquisiciones, lo que desafía nuestra capacidad de absorción cultural.'},
+      {tag:'Reestructuración', class:'especial', points:0, value:'decrecimiento', text:'Decrecimiento o reestructuración: atravesamos o estamos en proceso de reducción de estructura, desvinculaciones o salidas de líneas de negocio, con foco en eficiencia operativa.'},
+    ]
+  },
+  {
+    id:'q7', area:'Madurez de Procesos',
+    title:'Madurez de Procesos Generales de RR.HH.',
+    text:'¿Cómo describirías los procesos centrales de RR.HH. (ingresos, licencias, evaluaciones, salidas)?',
+    options:[
+      {tag:'Madura', class:'madura', points:3, text:'Estratégicos y automatizados: los procesos principales corren de manera fluida, están digitalizados y generan impacto positivo directo en la experiencia del colaborador.'},
+      {tag:'Intermedia', class:'intermedia', points:2, text:'Operativos e inocuos: funcionan internamente y se cumple con lo legal, pero son percibidos como transaccionales; no mueven la aguja ni aportan valor percibido al negocio.'},
+      {tag:'Crítica', class:'critica', points:1, text:'Burocráticos o deficientes: los procesos son lentos, manuales o directamente no funcionan, generando fricciones constantes y sobrecarga administrativa en líderes y equipos.'},
+    ]
+  },
+  {
+    id:'q8', area:'Alineamiento Estratégico',
+    title:'Alineamiento Estratégico del Equipo de RR.HH.',
+    text:'¿Qué rol juega el área de personas frente a la mesa directiva?',
+    options:[
+      {tag:'Madura', class:'madura', points:3, text:'Socio estratégico (Business Partner): el equipo de RR.HH. entiende a fondo el negocio, habla el lenguaje de los números y codiseña la estrategia junto a la mesa directiva.'},
+      {tag:'Intermedia', class:'intermedia', points:2, text:'Funcional / reactivo: RR.HH. está alineado a las necesidades operativas de las áreas y responde bien cuando se lo solicita, pero rara vez propone iniciativas proactivas.'},
+      {tag:'Crítica', class:'critica', points:1, text:'Aislado administrativo: muy enfocado en soporte, liquidación y relaciones laborales rígidas, con una desconexión evidente respecto a los objetivos de facturación y mercado.'},
+    ]
+  },
+  {
+    id:'q9', area:'Planificación de Negocio',
+    title:'Planificación del Negocio y Capacidad del Talento',
+    text:'Sobre la conexión entre los objetivos del negocio y la planificación de la estructura:',
+    options:[
+      {tag:'Madura', class:'madura', points:3, text:'La estrategia de negocio a mediano plazo está clara y RR.HH. ya tiene proyectadas las capacidades, roles y competencias que el equipo necesitará para cumplir esos objetivos.'},
+      {tag:'Intermedia', class:'intermedia', points:2, text:'Sabemos hacia dónde va el negocio este año, los objetivos comerciales son claros, pero planificamos la necesidad de personal "sobre la marcha", cuando los cuellos de botella ya aparecieron.'},
+      {tag:'Crítica', class:'critica', points:1, text:'Vivimos en el cortísimo plazo. Los objetivos cambian frecuentemente según la coyuntura y no hay conexión real entre las metas de facturación y la estructura del equipo.'},
+    ]
+  },
+];
+
+const BLOQUES_INDUSTRIA = {
+  tech:{
+    titulo:'Tecnología, Fintech y Soluciones Digitales',
+    texto:'En este 2026, el mercado tecnológico exige una eficiencia operativa extrema tras la consolidación de la inteligencia artificial. El dolor principal ya no es contratar masivamente, sino la escasez crítica de perfiles hiperespecializados (IA, Data Avanzada y Ciberseguridad) combinada con la presión de presupuestos locales frente a ofertas globales. Mantener el compromiso de equipos remotos o híbridos en un entorno de alta exigencia requiere esquemas de compensación total ultra flexibles. Si tu diagnóstico arroja procesos reactivos o falta de datos, la velocidad de disrupción del sector puede dejarte fuera de juego muy rápido.'
+  },
+  servicios:{
+    titulo:'Servicios Profesionales',
+    texto:'En las empresas de servicios, el talento es el producto. En 2026, el sector enfrenta un fuerte burnout de los mandos medios y la necesidad urgente de rediseñar los modelos de negocio tradicionales debido a la automatización de tareas básicas. Tu principal desafío es lograr que los profesionales de alto valor no se desgasten en la operación transaccional, al mismo tiempo que acelerás el desarrollo de habilidades consultivas complejas. Desatender el clima o mantener un RR.HH. puramente administrativo equivale directamente a perder cuentas clave que se mudan con las personas que las atienden.'
+  },
+  retail:{
+    titulo:'Retail, E-commerce y Logística',
+    texto:'La realidad de tu industria en 2026 está marcada por la omnicanalidad instantánea y la robotización de centros de distribución. Tu dolor de personas más agudo es la altísima rotación y el ausentismo crónico en la primera línea operativa (tiendas, repartidores, operarios de depósito). Si tu estrategia de atracción no es ágil o tu comunicación interna falla, el costo oculto de reclutamiento constante y la baja productividad en el punto de entrega erosionarán tus márgenes, afectando de forma directa la experiencia del cliente final y la rentabilidad del negocio.'
+  },
+  consumo:{
+    titulo:'Consumo Masivo y Manufactura Liviana',
+    texto:'Las empresas productoras enfrentan en 2026 una fuerte presión inflacionaria en costos de materias primas y complejas negociaciones sindicales en planta. El desafío de RR.HH. es doble: debés mantener la paz social y la eficiencia en las líneas de producción estables, mientras acelerás el reskilling digital del equipo comercial y de marketing para los nuevos canales de venta directa. Si la gestión de personas sigue siendo un centro de costos reactivo, te costará atraer a los perfiles profesionales modernos y perderás competitividad en las góndolas.'
+  },
+  energia:{
+    titulo:'Energía, Minería, Infraestructura e Industria Pesada',
+    texto:'Las industrias de capital intensivo, infraestructura y servicios públicos viven en 2026 la mayor tensión de su historia: la reconversión tecnológica de estructuras operativas tradicionales. Tu principal desafío de personas no es solo el recambio generacional, sino la digitalización y automatización de procesos clave conviviendo con estructuras sindicales fuertes y la necesidad de mantener la paz social. Si la gestión de personas sigue siendo reactiva e inercial, la resistencia interna al cambio cultural y la obsolescencia de habilidades operativas se convertirán en el principal freno para la modernización y la eficiencia del negocio.'
+  },
+  pharma:{
+    titulo:'Pharma, Salud y Biotecnología',
+    texto:'Tu industria opera bajo un marco de regulación y compliance extremo. En 2026, el principal dolor de talento es la convivencia de dos realidades dispares: la retención de perfiles científicos/médicos ultra especializados con lógicas de mercado global, y la gestión de la fuerza de ventas o personal administrativo tradicional. Si tus procesos de RR.HH. son percibidos como burocráticos o inocuos, ralentizarás los tiempos de aprobación y lanzamiento de productos, perdiendo terreno frente a competidores más dinámicos.'
+  },
+  banca:{
+    titulo:'Banca, Finanzas Tradicionales y Seguros',
+    texto:'El sector financiero tradicional se encuentra en medio de una reestructuración profunda y dolorosa debido a la digitalización masiva. Tu dolor de personas número uno es el reskilling o la salida ordenada de miles de empleados cuyas tareas operativas quedaron obsoletas, mientras intentás asimilar una cultura ágil que atraiga al talento digital que hoy prefiere las Fintech. Si RR.HH. se mantiene aislado en tareas de soporte legal y liquidación, la resistencia al cambio cultural frenará la transformación digital que exige el negocio para sobrevivir.'
+  },
+  otro:{
+    titulo:'Tu sector',
+    texto:'En 2026, prácticamente toda industria atraviesa una tensión común: la convivencia de estructuras tradicionales con la presión de digitalizar, automatizar y atraer talento más joven en un contexto de costos crecientes. Cuanto más reactiva sea tu gestión de personas, mayor es el riesgo de quedar atrás. La buena noticia es que el diagnóstico que acabás de hacer te muestra exactamente dónde están los puntos críticos a accionar primero.'
+  },
+};
+
+const BLOQUES_TAMANO = {
+  s1:{
+    titulo:'Hasta 50 empleados — Estructura centralizada',
+    texto:'En organizaciones de este tamaño, el crecimiento depende casi exclusivamente de la impronta y la agenda de los fundadores. El desafío estructural inmediato es profesionalizar las bases de la gestión de personas sin perder la agilidad ni burocratizar la empresa. Estás en el momento exacto para delegar la operación del día a día e implementar procesos claros de atracción y ordenamiento interno antes de que la cultura original se rompa por el crecimiento.'
+  },
+  s2:{
+    titulo:'Entre 50 y 100 empleados — El puente organizacional',
+    texto:'Te encontrás en la etapa de transición más desafiante para una empresa: el salto hacia la profesionalización. Las dinámicas de comunicación directa del dueño ya no alcanzan y el área de personas suele estar desbordada atendiendo temas administrativos. Tu gran reto aquí es estructurar y empoderar a los mandos medios. Si tus líderes de equipo no están capacitados para gestionar personas y el clima diario, se convertirán en el principal cuello de botella para cumplir las metas del negocio.'
+  },
+  s3:{
+    titulo:'Entre 101 y 250 empleados — Alineación y datos',
+    texto:'Con una plantilla de esta escala, la distancia entre la mesa directiva y el colaborador de a pie se agranda visiblemente. El dolor estructural de esta etapa es la falta de equidad interna (escalas salariales difusas) y la aparición de fricciones entre áreas. Necesitás dejar atrás las decisiones basadas en la intuición e incorporar herramientas de People Analytics y estructuras de compensación claras para liderar la organización con datos objetivos y consistentes.'
+  },
+  s4:{
+    titulo:'Entre 251 y 500 empleados — Derribando silos',
+    texto:'A este nivel, la organización corre el riesgo inminente de "aislarse": que cada departamento funcione como una isla independiente con sus propias subculturas. El área de Capital Humano requiere subespecialidades internas claras (Atracción, Desarrollo, Compensaciones). Tu foco principal como líder debe estar en garantizar una experiencia de empleado homogénea y robustecer los planes de sucesión, asegurando que el negocio no se detenga si una pieza clave decide moverse.'
+  },
+  s5:{
+    titulo:'Más de 500 empleados — Complejidad corporativa',
+    texto:'Manejás una corporación con una complejidad estructural elevada, donde las políticas y procesos ya existen pero suelen volverse rígidos o excesivamente lentos. Tu desafío actual es lograr la personalización de la experiencia del colaborador a escala y flexibilizar las estructuras. Necesitás tecnología que elimine la carga administrativa de los líderes y un RR.HH. posicionado firmemente como Business Partner para que la burocracia interna no asfixie la innovación y el compromiso de los equipos.'
+  },
+};
+
+const BLOQUES_HEADCOUNT = {
+  estable:{
+    titulo:'Estructura estable',
+    texto:'Tu dotación está en un momento estable, sin movimientos abruptos. Es una posición valiosa para trabajar en profundidad sobre la calidad de los procesos, el desarrollo del talento existente y la planificación de mediano plazo, antes de que un cambio externo o interno te obligue a reaccionar.'
+  },
+  crecimiento:{
+    titulo:'Crecimiento o integración acelerada',
+    texto:'Estás creciendo o integrando equipos. Este es el contexto donde la cultura se diluye más rápido y donde los procesos de onboarding, liderazgo intermedio y comunicación interna se transforman en variables críticas. Si no se aceleran al mismo ritmo que la dotación, el riesgo es romper la cultura que te trajo hasta acá.'
+  },
+  decrecimiento:{
+    titulo:'Reestructuración o reducción',
+    texto:'Estás transitando una reducción o reestructuración. El foco aquí no es solo la salida ordenada sino la gestión del talento que queda: el "survivor syndrome" puede impactar fuerte en el compromiso y la productividad de quienes se quedan. Trabajar el clima, redefinir roles y comunicar el nuevo norte son acciones que no pueden quedar para después.'
+  },
+};
+
+const BLOQUES_PERFIL = {
+  critico:{
+    titulo:'Perfil General Crítico',
+    rango:'8 a 13 puntos',
+    texto:'Tu diagnóstico muestra que la gestión de personas hoy está actuando más como freno que como motor del negocio. Hay áreas clave funcionando de manera reactiva o directamente inexistente. La buena noticia: estás a tiempo, y los movimientos correctos en los próximos 90 días pueden cambiar la curva. La mala: si seguís postergando, el costo (de rotación, productividad y oportunidades perdidas) ya está impactando el margen, aunque todavía no lo veas en el P&L.'
+  },
+  intermedio:{
+    titulo:'Perfil General Intermedio',
+    rango:'14 a 19 puntos',
+    texto:'Tu organización tiene bases razonables de gestión de personas, pero está atrapada en un nivel funcional/operativo: hace lo que tiene que hacer, pero no apalanca el negocio. Es el perfil más común y, paradójicamente, el más riesgoso: te sentís "bien" mientras tu competencia más madura te saca ventaja semana a semana. El próximo salto no es trabajar más, es trabajar distinto.'
+  },
+  maduro:{
+    titulo:'Perfil General Maduro',
+    rango:'20 a 24 puntos',
+    texto:'Tu gestión de personas está jugando en la primera división. Los procesos corren, los líderes accionan, los datos están sobre la mesa y RR.HH. forma parte de la conversación estratégica. El desafío en este nivel no es ponerse al día sino sostener la madurez sin perder agilidad, y profundizar en frentes específicos (analítica avanzada, sucesión, compensación total flexible) que separan a las empresas buenas de las realmente memorables.'
+  },
+};
+
+const FLAGS_TEXTOS = {
+  sinNecesidad:{
+    label:'Flag activado · Sin necesidad activa de incorporación',
+    texto:'Que tu estructura actual esté consolidada y sin búsquedas abiertas es una posición cómoda, pero no te confíes. En el mercado actual, la inacción en marca empleadora destruye tu capacidad de atracción futura. Es el momento ideal para diseñar tu base de talento de reserva (talent pool) antes de que surja una baja inesperada.'
+  },
+  rotacionPasiva:{
+    label:'Flag activado · Rotación pasiva',
+    texto:'¡Alerta! Una baja rotación basada en la antigüedad de la dotación o la estabilidad salarial puede ser una trampa silenciosa. Esto suele esconder un fenómeno de "rotación latente" o estancamiento cultural, donde el equipo no se va pero tampoco empuja la innovación. El riesgo de resistencia al cambio tecnológico es elevado.'
+  },
+  climaOrganico:{
+    label:'Flag activado · Clima orgánico sin medición',
+    texto:'Es positivo que las relaciones diarias fluyan de forma saludable de manera natural, pero la intuición no es escalable. Cuando la empresa sume estructura o atraviese una crisis de mercado, la falta de datos formales sobre el clima te impedirá tomar decisiones preventivas. Lo que no se mide, no se puede mejorar de forma sostenible.'
+  },
+};
+
+/* ============================================================
+   GOOGLE APPS SCRIPT INTEGRATION
+   ============================================================
+   1. Abrí tu proyecto en script.google.com
+   2. Deploy > New deployment > Tipo: Web app
+   3. Execute as: Me · Who has access: Anyone
+   4. Copiá el "Web app URL" y pegalo abajo. */
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxtYHVbfRQdFoL42t8t5JdHcunHtoGo3X3TOkqrsgBjaFbSnAtg5w1gCFUDsjv8c_Qj/exec';
+
+async function sendToSheet(payload){
+  if(APPS_SCRIPT_URL === 'PEGAR_AQUI_TU_URL'){
+    console.warn('[Sheet] URL no configurado — los datos no se están guardando.');
+    return;
+  }
+  try{
+    // text/plain + no-cors evita el preflight CORS de Apps Script.
+    // El doPost igual hace JSON.parse(e.postData.contents) y procesa bien.
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: JSON.stringify(payload),
+    });
+  } catch(e){
+    console.error('[Sheet] Error al enviar:', e);
+  }
+}
+
+/* ============================================================
+   STATE + FLOW
+   ============================================================ */
+
+const state = {
+  step:0,
+  total: SEGMENTACION.length + PREGUNTAS.length, // 3 + 9 = 12
+  answers:{},  // {industria, tamano, rol, q1...q9 (con {points, tag, flag, value})}
+  lead:{},
+};
+
+function setScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function startTest(){
+  state.step = 1;
+  renderStep();
+  setScreen('screen-questions');
+  document.getElementById('progressWrap').style.display='flex';
+  updateProgress();
+}
+
+function updateProgress(){
+  const pct = ((state.step) / (state.total+1)) * 100; // +1 to leave room for form
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `Paso ${state.step} de ${state.total}`;
+}
+
+function renderStep(){
+  const i = state.step - 1;
+  const container = document.getElementById('qStep');
+
+  // First 3 steps: segmentación
+  if(i < SEGMENTACION.length){
+    const s = SEGMENTACION[i];
+    container.innerHTML = `
+      <span class="eyebrow">Paso ${state.step} · Contexto</span>
+      <h2 class="display">${s.label}</h2>
+      <div class="options">
+        ${s.options.map(o => `
+          <button class="option" onclick="selectSegment('${s.id}', '${o.v}', this)">
+            <span class="option-text">${o.t}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="q-nav">
+        ${state.step>1 ? '<button class="back" onclick="goBack()">← Volver</button>' : '<span></span>'}
+        <span></span>
+      </div>
+    `;
+  } else {
+    // Questions
+    const qi = i - SEGMENTACION.length;
+    const q = PREGUNTAS[qi];
+    container.innerHTML = `
+      <span class="eyebrow">Pregunta ${qi+1} de 9 · ${q.area}</span>
+      <h2 class="display">${q.title}</h2>
+      <p style="color:var(--muted);margin:-16px 0 28px;max-width:620px;font-size:15px">${q.text}</p>
+      <div class="options">
+        ${q.options.map((o, idx) => `
+          <button class="option" onclick="selectAnswer('${q.id}', ${idx}, this)">
+            <span class="option-tag ${o.class}">${o.tag}</span>
+            <span class="option-text">${o.text}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="q-nav">
+        <button class="back" onclick="goBack()">← Volver</button>
+        <span></span>
+      </div>
+    `;
+  }
+  updateProgress();
+}
+
+function selectSegment(field, value, btnEl){
+  // Visual feedback
+  btnEl.parentElement.querySelectorAll('.option').forEach(b=>b.classList.remove('selected'));
+  btnEl.classList.add('selected');
+  state.answers[field] = value;
+  setTimeout(()=> nextStep(), 200);
+}
+
+function selectAnswer(qid, optIdx, btnEl){
+  btnEl.parentElement.querySelectorAll('.option').forEach(b=>b.classList.remove('selected'));
+  btnEl.classList.add('selected');
+  const q = PREGUNTAS.find(p=>p.id===qid);
+  const o = q.options[optIdx];
+  state.answers[qid] = {
+    points: o.points,
+    tag: o.tag,
+    flag: o.flag || null,
+    value: o.value || null,
+    text: o.text,
+    area: q.area,
+  };
+  setTimeout(()=> nextStep(), 220);
+}
+
+function nextStep(){
+  if(state.step < state.total){
+    state.step++;
+    renderStep();
+  } else {
+    // Go to form
+    setScreen('screen-form');
+    document.getElementById('progressFill').style.width = '95%';
+    document.getElementById('progressText').textContent = `Casi listo · Datos finales`;
+  }
+}
+
+function goBack(){
+  if(state.step > 1){
+    state.step--;
+    setScreen('screen-questions');
+    renderStep();
+  } else if (state.step === 1) {
+    setScreen('screen-landing');
+    document.getElementById('progressWrap').style.display='none';
+  }
+}
+
+function submitLead(){
+  const form = document.getElementById('leadForm');
+  let valid = true;
+  ['nombre','email','empresa'].forEach(name=>{
+    const input = form.querySelector(`[name="${name}"]`);
+    const field = input.closest('.field');
+    field.classList.remove('has-error');
+    if(!input.value.trim() || (name==='email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value))){
+      field.classList.add('has-error');
+      valid = false;
+    }
+  });
+  if(!valid) {
+    // scroll al primer error
+    const firstErr = form.querySelector('.has-error');
+    if(firstErr) firstErr.scrollIntoView({behavior:'smooth', block:'center'});
+    return false;
+  }
+  state.lead = {
+    nombre: form.nombre.value.trim(),
+    email: form.email.value.trim(),
+    empresa: form.empresa.value.trim(),
+  };
+
+  // Calcular score y armar payload (matchea las 9 columnas de la Sheet)
+  const {total, perfil} = calcScore();
+  const payload = {
+    nombre: state.lead.nombre,
+    email: state.lead.email,
+    empresa: state.lead.empresa,
+    industria: BLOQUES_INDUSTRIA[state.answers.industria]?.titulo || state.answers.industria,
+    tamano: BLOQUES_TAMANO[state.answers.tamano]?.titulo.split('—')[0].trim() || state.answers.tamano,
+    rol: state.answers.rol,
+    puntaje: total,
+    perfil: BLOQUES_PERFIL[perfil].titulo,
+  };
+  sendToSheet(payload);
+
+  renderResults();
+  setScreen('screen-results');
+  document.getElementById('progressWrap').style.display='none';
+  return false;
+}
+
+/* ============================================================
+   RESULTS RENDERING
+   ============================================================ */
+
+function calcScore(){
+  let total = 0;
+  const breakdown = [];
+  PREGUNTAS.forEach(q=>{
+    if(q.contextOnly) return; // skip Q6
+    const a = state.answers[q.id];
+    if(a){
+      total += a.points;
+      breakdown.push({area:q.area, tag:a.tag, points:a.points});
+    }
+  });
+  let perfil;
+  if(total <= 13) perfil = 'critico';
+  else if(total <= 19) perfil = 'intermedio';
+  else perfil = 'maduro';
+  return {total, perfil, breakdown};
+}
+
+function getFlags(){
+  const flags = [];
+  PREGUNTAS.forEach(q=>{
+    const a = state.answers[q.id];
+    if(a && a.flag) flags.push(a.flag);
+  });
+  return flags;
+}
+
+function renderResults(){
+  const {total, perfil, breakdown} = calcScore();
+  const flags = getFlags();
+  const lead = state.lead;
+  const industriaKey = state.answers.industria;
+  const tamanoKey = state.answers.tamano;
+  const headcountVal = state.answers.q6 ? state.answers.q6.value : 'estable';
+
+  const perfilBlock = BLOQUES_PERFIL[perfil];
+  const industriaBlock = BLOQUES_INDUSTRIA[industriaKey];
+  const tamanoBlock = BLOQUES_TAMANO[tamanoKey];
+  const headcountBlock = BLOQUES_HEADCOUNT[headcountVal];
+
+  const fechaHoy = new Date().toLocaleDateString('es-AR',{year:'numeric',month:'long',day:'numeric'});
+
+  const flagsHTML = flags.length
+    ? flags.map(f => `
+        <div class="flag-box">
+          <div class="flag-label">${FLAGS_TEXTOS[f].label}</div>
+          <p>${FLAGS_TEXTOS[f].texto}</p>
+        </div>`).join('')
+    : '';
+
+  const breakdownHTML = breakdown.map(b=>`
+    <div class="breakdown-item">
+      <div class="b-label">${b.area}</div>
+      <div class="b-val">${b.tag}<span class="b-pts">${b.points} pts</span></div>
+    </div>
+  `).join('');
+
+  document.getElementById('resultsContent').innerHTML = `
+    <div class="results-header">
+      <span class="eyebrow">Reporte Ejecutivo de Talento · Indigo</span>
+      <h1>${lead.nombre}, este es el diagnóstico de ${lead.empresa}.</h1>
+      <div class="meta-row">
+        <span><strong>Fecha:</strong> ${fechaHoy}</span>
+        <span><strong>Industria:</strong> ${industriaBlock.titulo}</span>
+        <span><strong>Tamaño:</strong> ${tamanoBlock.titulo.split('—')[0].trim()}</span>
+      </div>
+    </div>
+
+    <div class="score-block">
+      <div class="score-circle">
+        <div class="num">${total}</div>
+        <div class="denom">DE 24</div>
+      </div>
+      <div class="score-info">
+        <div class="label">Resultado general</div>
+        <h2>${perfilBlock.titulo}</h2>
+        <p>${perfilBlock.texto}</p>
+      </div>
+    </div>
+
+    <div class="report-section">
+      <h3><span class="num">01</span>El contexto de tu sector</h3>
+      <p><strong>${industriaBlock.titulo}.</strong> ${industriaBlock.texto}</p>
+    </div>
+
+    <div class="report-section">
+      <h3><span class="num">02</span>Tu momento estructural</h3>
+      <p>${tamanoBlock.texto}</p>
+    </div>
+
+    <div class="report-section">
+      <h3><span class="num">03</span>Dinámica actual de tu dotación</h3>
+      <p><strong>${headcountBlock.titulo}.</strong> ${headcountBlock.texto}</p>
+    </div>
+
+    ${flags.length ? `
+    <div class="report-section">
+      <h3><span class="num">04</span>Notas de consultoría específicas</h3>
+      ${flagsHTML}
+    </div>` : ''}
+
+    <div class="report-section">
+      <h3><span class="num">${flags.length ? '05' : '04'}</span>Detalle por dimensión</h3>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:6px">Así puntuó cada área de tu diagnóstico:</p>
+      <div class="breakdown">${breakdownHTML}</div>
+    </div>
+
+    <div class="cta-block">
+      <span class="eyebrow">Próximo paso</span>
+      <h3>${lead.nombre}, conversemos sobre los próximos 90 días de ${lead.empresa}.</h3>
+      <p>Una sesión estratégica de 45 minutos sin costo con el equipo de Indigo Talent Hub, donde traducimos este diagnóstico en un plan de acción concreto, priorizado y a la medida de tu organización.</p>
+      <div class="cta-buttons">
+        <a href="mailto:juan@indigotalent.com?subject=Sesión%20estratégica%20-%20${encodeURIComponent(lead.empresa)}&body=Hola%20Juan%2C%0A%0AAcabo%20de%20completar%20el%20Diagnóstico%20Indigo%20y%20quiero%20agendar%20una%20sesión%20estratégica%20para%20revisar%20los%20resultados%20de%20${encodeURIComponent(lead.empresa)}.%0A%0ASaludos%2C%0A${encodeURIComponent(lead.nombre)}" class="btn btn-primary">Agendar sesión estratégica gratuita <span class="btn-arrow">→</span></a>
+        <button class="btn btn-ghost print-btn" onclick="window.print()">Descargar reporte en PDF</button>
+      </div>
+    </div>
+
+    <p class="footer-note">Diagnóstico Indigo © ${new Date().getFullYear()} · Indigo Talent Hub · Buenos Aires, Argentina</p>
+  `;
+}
+</script>
+</body>
+</html>
