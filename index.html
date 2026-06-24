@@ -195,14 +195,52 @@
   .flag-box .flag-label{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#9c5a00;font-weight:700;margin-bottom:6px}
   .flag-box p{margin:0;font-size:14px;color:#3a2a10}
 
-  .breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:18px}
-  .breakdown-item{
-    background:var(--cream);border:1px solid var(--line);border-radius:var(--radius-sm);
-    padding:12px 14px;font-size:12px;
+  /* Gráfico de barras horizontales */
+  .breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 18px;
   }
-  .breakdown-item .b-label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
-  .breakdown-item .b-val{font-weight:600;color:var(--navy);font-size:14px}
-  .breakdown-item .b-val .b-pts{font-size:11px;color:var(--muted);font-weight:500;margin-left:4px}
+  .breakdown-item-graph {
+    background: var(--cream);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 16px 20px;
+  }
+  .b-graph-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+  .b-graph-header .b-label {
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .b-graph-header .b-val {
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .b-graph-header .b-pts {
+    color: var(--muted);
+    margin-left: 4px;
+  }
+  .b-graph-track {
+    height: 8px;
+    background: rgba(3, 5, 54, 0.06);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .b-graph-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.6s ease;
+  }
+  .bar-madura { background: #1f6b46; }
+  .bar-intermedia { background: var(--orange); }
+  .bar-critica { background: var(--coral); }
 
   .cta-block{
     background:linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
@@ -245,7 +283,6 @@
 
 <main class="container">
 
-  <!-- LANDING -->
   <section class="screen active" id="screen-landing">
     <div class="hero">
       <span class="eyebrow">Diagnóstico Indigo · 2026</span>
@@ -260,12 +297,10 @@
     </div>
   </section>
 
-  <!-- SEGMENTATION + QUESTIONS render dynamically -->
   <section class="screen" id="screen-questions">
     <div class="q-step" id="qStep"></div>
   </section>
 
-  <!-- LEAD FORM -->
   <section class="screen" id="screen-form">
     <div class="form-step">
       <span class="eyebrow">Último paso</span>
@@ -298,7 +333,6 @@
     </div>
   </section>
 
-  <!-- RESULTS -->
   <section class="screen" id="screen-results">
     <div class="results" id="resultsContent"></div>
   </section>
@@ -431,7 +465,7 @@ const PREGUNTAS = [
     text:'¿Qué rol juega el área de personas frente a la mesa directiva?',
     options:[
       {tag:'Madura', class:'madura', points:3, text:'Socio estratégico (Business Partner): el equipo de RR.HH. entiende a fondo el negocio, habla el lenguaje de los números y codiseña la estrategia junto a la mesa directiva.'},
-      {tag:'Intermedia', class:'intermedia', points:2, text:'Funcional / reactivo: RR.HH. está alineado a las necesidades operativas de las áreas y responde bien cuando se lo solicita, pero rara vez propone iniciativas proactivas.'},
+      {tag:'Intermedia', class:'intermedia', points:2, text:'Funcional / reactivo: RR.HH. está alineado a las necesidades operativas de las áreas and responde bien cuando se lo solicita, pero rara vez propone iniciativas proactivas.'},
       {tag:'Crítica', class:'critica', points:1, text:'Aislado administrativo: muy enfocado en soporte, liquidación y relaciones laborales rígidas, con una desconexión evidente respecto a los objetivos de facturación y mercado.'},
     ]
   },
@@ -466,7 +500,7 @@ const BLOQUES_INDUSTRIA = {
   },
   energia:{
     titulo:'Energía, Minería, Infraestructura e Industria Pesada',
-    texto:'Las industrias de capital intensivo, infraestructura y servicios públicos viven en 2026 la mayor tensión de su historia: la reconversión tecnológica de estructuras operativas tradicionales. Tu principal desafío de personas no es solo el recambio generacional, sino la digitalización y automatización de procesos clave conviviendo con estructuras sindicales fuertes y la necesidad de mantener la paz social. Si la gestión de personas sigue siendo reactiva e inercial, la resistencia interna al cambio cultural y la obsolescencia de habilidades operativas se convertirán en el principal freno para la modernización y la eficiencia del negocio.'
+    texto:'Las industrias de capital intensivo, infraestructura y servicios públicos viven en 2026 la mayor tensión de su historia: la reconversión tecnológica de estructuras operativas tradicionales. Tu principal desafío de personas no es solo el recambio generacional, sino la digitalización y automatización de procesos clave conviviendo con estructuras sindicales fuertes y la necesidad de mantener la paz social. Si la gestión de personas sigue siendo reactiva e inercial, la resistencia interna al cambio cultural y la obsolescencia de habilidades operativas se convierten en el principal freno para la modernización y la eficiencia del negocio.'
   },
   pharma:{
     titulo:'Pharma, Salud y Biotecnología',
@@ -555,11 +589,7 @@ const FLAGS_TEXTOS = {
 
 /* ============================================================
    GOOGLE APPS SCRIPT INTEGRATION
-   ============================================================
-   1. Abrí tu proyecto en script.google.com
-   2. Deploy > New deployment > Tipo: Web app
-   3. Execute as: Me · Who has access: Anyone
-   4. Copiá el "Web app URL" y pegalo abajo. */
+   ============================================================ */
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxtYHVbfRQdFoL42t8t5JdHcunHtoGo3X3TOkqrsgBjaFbSnAtg5w1gCFUDsjv8c_Qj/exec';
 
 async function sendToSheet(payload){
@@ -568,8 +598,6 @@ async function sendToSheet(payload){
     return;
   }
   try{
-    // text/plain + no-cors evita el preflight CORS de Apps Script.
-    // El doPost igual hace JSON.parse(e.postData.contents) y procesa bien.
     await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -607,7 +635,7 @@ function startTest(){
 }
 
 function updateProgress(){
-  const pct = ((state.step) / (state.total+1)) * 100; // +1 to leave room for form
+  const pct = ((state.step) / (state.total+1)) * 100;
   document.getElementById('progressFill').style.width = pct + '%';
   document.getElementById('progressText').textContent = `Paso ${state.step} de ${state.total}`;
 }
@@ -616,7 +644,6 @@ function renderStep(){
   const i = state.step - 1;
   const container = document.getElementById('qStep');
 
-  // First 3 steps: segmentación
   if(i < SEGMENTACION.length){
     const s = SEGMENTACION[i];
     container.innerHTML = `
@@ -635,7 +662,6 @@ function renderStep(){
       </div>
     `;
   } else {
-    // Questions
     const qi = i - SEGMENTACION.length;
     const q = PREGUNTAS[qi];
     container.innerHTML = `
@@ -660,7 +686,6 @@ function renderStep(){
 }
 
 function selectSegment(field, value, btnEl){
-  // Visual feedback
   btnEl.parentElement.querySelectorAll('.option').forEach(b=>b.classList.remove('selected'));
   btnEl.classList.add('selected');
   state.answers[field] = value;
@@ -688,7 +713,6 @@ function nextStep(){
     state.step++;
     renderStep();
   } else {
-    // Go to form
     setScreen('screen-form');
     document.getElementById('progressFill').style.width = '95%';
     document.getElementById('progressText').textContent = `Casi listo · Datos finales`;
@@ -719,7 +743,6 @@ function submitLead(){
     }
   });
   if(!valid) {
-    // scroll al primer error
     const firstErr = form.querySelector('.has-error');
     if(firstErr) firstErr.scrollIntoView({behavior:'smooth', block:'center'});
     return false;
@@ -730,7 +753,6 @@ function submitLead(){
     empresa: form.empresa.value.trim(),
   };
 
-  // Calcular score y armar payload (matchea las 9 columnas de la Sheet)
   const {total, perfil} = calcScore();
   const payload = {
     nombre: state.lead.nombre,
@@ -758,7 +780,7 @@ function calcScore(){
   let total = 0;
   const breakdown = [];
   PREGUNTAS.forEach(q=>{
-    if(q.contextOnly) return; // skip Q6
+    if(q.contextOnly) return; 
     const a = state.answers[q.id];
     if(a){
       total += a.points;
@@ -795,7 +817,7 @@ function renderResults(){
   const headcountBlock = BLOQUES_HEADCOUNT[headcountVal];
 
   const fechaHoy = new Date().toLocaleDateString('es-AR',{year:'numeric',month:'long',day:'numeric'});
-
+  
   const flagsHTML = flags.length
     ? flags.map(f => `
         <div class="flag-box">
@@ -804,12 +826,24 @@ function renderResults(){
         </div>`).join('')
     : '';
 
-  const breakdownHTML = breakdown.map(b=>`
-    <div class="breakdown-item">
-      <div class="b-label">${b.area}</div>
-      <div class="b-val">${b.tag}<span class="b-pts">${b.points} pts</span></div>
-    </div>
-  `).join('');
+  const breakdownHTML = breakdown.map(b => {
+    const porcentaje = (b.points / 3) * 100;
+    let colorClase = 'bar-critica';
+    if (b.points === 2) colorClase = 'bar-intermedia';
+    if (b.points === 3) colorClase = 'bar-madura';
+
+    return `
+      <div class="breakdown-item-graph">
+        <div class="b-graph-header">
+          <span class="b-label">${b.area}</span>
+          <span class="b-val">${b.tag} <span class="b-pts">(${b.points}/3 pts)</span></span>
+        </div>
+        <div class="b-graph-track">
+          <div class="b-graph-fill ${colorClase}" style="width: ${porcentaje}%"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
 
   document.getElementById('resultsContent').innerHTML = `
     <div class="results-header">
@@ -864,7 +898,7 @@ function renderResults(){
     <div class="cta-block">
       <span class="eyebrow">Próximo paso</span>
       <h3>${lead.nombre}, conversemos sobre los próximos 90 días de ${lead.empresa}.</h3>
-      <p>Una sesión estratégica de 20 minutos sin costo con el equipo de Indigo Talent Hub, donde traducimos este diagnóstico en un plan de acción concreto, priorizado y a la medida de tu organización.</p>
+      <p>Una sesión estratégica de 45 minutos sin costo con el equipo de Indigo Talent Hub, donde traducimos este diagnóstico en un plan de acción concreto, priorizado y a la medida de tu organización.</p>
       <div class="cta-buttons">
         <a href="mailto:juan@indigotalent.com?subject=Sesión%20estratégica%20-%20${encodeURIComponent(lead.empresa)}&body=Hola%20Juan%2C%0A%0AAcabo%20de%20completar%20el%20Diagnóstico%20Indigo%20y%20quiero%20agendar%20una%20sesión%20estratégica%20para%20revisar%20los%20resultados%20de%20${encodeURIComponent(lead.empresa)}.%0A%0ASaludos%2C%0A${encodeURIComponent(lead.nombre)}" class="btn btn-primary">Agendar sesión estratégica gratuita <span class="btn-arrow">→</span></a>
         <button class="btn btn-ghost print-btn" onclick="window.print()">Descargar reporte en PDF</button>
