@@ -380,7 +380,7 @@ const SEGMENTACION = [
     options:[
       {v:'tech', t:'Tecnología, Fintech, EdTech y Soluciones Digitales'},
       {v:'servicios', t:'Servicios Profesionales (Consultoría, Legal, Agencias, BPO, IT)'},
-      {v:'retail', t:'Retail, E-commerce y Logística (última milla, distribución)'},
+      {v:'retail', t:'Retail, E-commerce y Logística (última milla, distribution)'},
       {v:'consumo', t:'Consumo Masivo y Manufactura Liviana'},
       {v:'energia', t:'Energía, Minería, Infraestructura, Servicios Públicos e Industria Pesada'},
       {v:'pharma', t:'Pharma, Salud y Biotecnología'},
@@ -416,7 +416,7 @@ const PREGUNTAS = [
   {
     id:'q1', area:'Reclutamiento y Selección',
     title:'Reclutamiento y Selección',
-    text:'Pensando en time-to-hire y atracción de talento, ¿cuál de estas frases describe mejor tu reality hoy?',
+    text:'Pensando en time-to-hire y atracción de talento, ¿cuál de estas frases describe mejor tu realidad hoy?',
     options:[
       {tag:'Madura', class:'madura', points:3, text:'Contamos con procesos ágiles apoyados en tecnología (ATS/IA), un employer branding sólido y cubrimos las vacantes clave a tiempo con talento alineado a la cultura.'},
       {tag:'Intermedia', class:'intermedia', points:2, text:'Cubrimos las posiciones, pero el proceso suele ser reactivo, largo, con comunicación poco fluida y dependemos excesivamente de consultoras externas para perfiles críticos.'},
@@ -536,7 +536,7 @@ const BLOQUES_INDUSTRIA = {
   },
   banca:{
     titulo:'Banca, Finanzas Tradicionales y Seguros',
-    texto:'El sector financiero tradicional se encuentra en medio de una reestructuración profunda y dolorosa debido a la digitalización masiva. Tu dolor de personas número uno es el reskilling o la salida ordenada de miles de empleados cuyas tareas operativas quedaron obsoletas, mientras intentás asimilar una cultura ágil que atraiga al talento digital que hoy prefiere las Fintech. Si RR.HH. se mantiene aislado en tareas de soporte legal and liquidación, la resistencia al cambio cultural frenará la transformación digital que exige el negocio para sobrevivir.'
+    texto:'El sector financiero tradicional se encuentra en medio de una reestructuración profunda y dolorosa debido a la digitalización masiva. Tu dolor de personas número uno es el reskilling o la salida ordenada de miles de empleados cuyas tareas operativas quedaron obsoletas, mientras intentás asimilar una cultura ágil que atraiga al talento digital que hoy prefiere las Fintech. Si RR.HH. se mantiene aislado en tareas de soporte legal y liquidación, la resistencia al cambio cultural frenará la transformación digital que exige el negocio para sobrevivir.'
   },
   otro:{
     titulo:'Tu sector',
@@ -616,13 +616,13 @@ const FLAGS_TEXTOS = {
 };
 
 /* ============================================================
-   GOOGLE APPS SCRIPT INTEGRATION (URL CONFIRMADA)
+   GOOGLE APPS SCRIPT INTEGRATION (URL ACTUALIZADA DE 18 COLUMNAS)
    ============================================================ */
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPAnz-XzZc9mCOz7vT9uN675yIe9iW5hDbeMscbOIdzU6vX5fS1bTzK8_NIDlW78Xf/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby_Oh4ymgEnkj6Ogr5KepqoZkLjAd7zTr9qx90DPq5aEdiUARrYVLN450qOodXK0Vch/exec';
 
 async function sendToSheet(payload){
   if(APPS_SCRIPT_URL === 'PEGAR_AQUI_TU_URL'){
-    console.warn('[Sheet] URL no configurada — los datos no se están guardando.');
+    console.warn('[Sheet] URL no configurado — los datos no se están guardando.');
     return;
   }
   try{
