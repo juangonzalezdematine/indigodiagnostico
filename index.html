@@ -258,8 +258,8 @@
   .footer-note a{color:var(--navy);text-decoration:none;border-bottom:1px solid var(--line-strong)}
 
   /* ============================================================
-     SISTEMA DE IMPRESIÓN EXCLUSIVO (PDF PREMIUM RE-DISEÑADO)
-     ============================================================ */
+      SISTEMA DE IMPRESIÓN EXCLUSIVO (PDF PREMIUM RE-DISEÑADO)
+      ============================================================ */
   @media print{
     @page {
       margin: 0; /* Borra fecha, hora, título y URL automáticos de los navegadores */
@@ -314,7 +314,7 @@
   <section class="screen active" id="screen-landing">
     <div class="hero">
       <span class="eyebrow">Diagnóstico Indigo Talent Hub · 2026</span>
-      <h1 class="display">Evaluá la salud del talento en <em>tu organización</em>.</h1>
+      <h1 class="display">Evaluá la salud de <em>tu organización</em>.</h1>
       <p class="lead">Un diagnóstico ejecutivo de 9 preguntas que cruza la madurez de tu gestión de personas con los dolores reales de tu industria y el momento estructural de tu empresa. Pensado para fundadores, CEOs y líderes de RR.HH. que quieren decisiones con foco, no más planillas.</p>
       <button class="btn btn-primary" onclick="startTest()">Comenzar diagnóstico <span class="btn-arrow">→</span></button>
       <div class="hero-meta">
@@ -416,7 +416,7 @@ const PREGUNTAS = [
   {
     id:'q1', area:'Reclutamiento y Selección',
     title:'Reclutamiento y Selección',
-    text:'Pensando en time-to-hire y atracción de talento, ¿cuál de estas frases describe mejor tu realidad hoy?',
+    text:'Pensando en time-to-hire y atracción de talento, ¿cuál de estas frases describe mejor tu reality hoy?',
     options:[
       {tag:'Madura', class:'madura', points:3, text:'Contamos con procesos ágiles apoyados en tecnología (ATS/IA), un employer branding sólido y cubrimos las vacantes clave a tiempo con talento alineado a la cultura.'},
       {tag:'Intermedia', class:'intermedia', points:2, text:'Cubrimos las posiciones, pero el proceso suele ser reactivo, largo, con comunicación poco fluida y dependemos excesivamente de consultoras externas para perfiles críticos.'},
@@ -514,7 +514,7 @@ const BLOQUES_INDUSTRIA = {
     titulo:'Tecnología, Fintech y Soluciones Digitales',
     texto:'En este 2026, el mercado tecnológico exige una eficiencia operativa extrema tras la consolidación de la inteligencia artificial. El dolor principal ya no es contratar masivamente, sino la escasez crítica de perfiles hiperespecializados (IA, Data Avanzada y Ciberseguridad) combinada con la presión de presupuestos locales frente a ofertas globales. Mantener el compromiso de equipos remotos o híbridos en un entorno de alta exigencia requiere esquemas de compensación total ultra flexibles. Si tu diagnóstico arroja procesos reactivos o falta de datos, la velocidad de disrupción del sector puede dejarte fuera de juego muy rápido.'
   },
-  servicios:{
+  services:{
     titulo:'Servicios Profesionales',
     texto:'En las empresas de servicios, el talento es el producto. En 2026, el sector enfrenta un fuerte burnout de los mandos medios y la necesidad urgente de rediseñar los modelos de negocio tradicionales debido a la automatización de tareas básicas. Tu principal desafío es lograr que los profesionales de alto valor no se desgasten en la operación transaccional, al mismo tiempo que acelerás el desarrollo de habilidades consultivas complejas. Desatender el clima o mantener un RR.HH. puramente administrativo equivale directamente a perder cuentas clave que se mudan con las personas que las atienden.'
   },
@@ -570,7 +570,7 @@ const BLOQUES_TAMANO = {
 const BLOQUES_HEADCOUNT = {
   estable:{
     titulo:'Estructura estable',
-    texto:'Tu dotación está en un momento estable, sin movimientos abruptos. Es una posición valiosa para trabajar en profundidad sobre la calidad de los procesos, el desarrollo del talento existente y la planificación de mediano plazo, antes de que un cambio externo o interno te obligue a reaccionar.'
+    texto:'Tu dotación está en un momento stable, sin movimientos abruptos. Es una posición valiosa para trabajar en profundidad sobre la calidad de los procesos, el desarrollo del talento existente y la planificación de mediano plazo, antes de que un cambio externo o interno te obligue a reaccionar.'
   },
   crecimiento:{
     titulo:'Crecimiento o integración acelerada',
@@ -939,7 +939,7 @@ function renderResults(){
       <h3>${lead.nombre}, conversemos sobre los próximos 90 días de ${lead.empresa}.</h3>
       <p>Una sesión estratégica de 20 minutos sin costo con el equipo de Indigo Talent Hub, donde traducimos este diagnóstico en un plan de acción concreto, priorizado y a la medida de tu organización.</p>
       <div class="cta-buttons">
-        <a href="mailto:juan@indigotalenthub.com?subject=Sesión%20estratégica%20-%20${encodeURIComponent(lead.empresa)}&body=Hola%20Juan%2C%0A%0AAcabo%20de%20completar%20el%20Diagnóstico%20Indigo%20y%20quiero%20agendar%20una%20sesión%20estratégica%20para%20revisar%20los%20resultados%20de%20${encodeURIComponent(lead.empresa)}.%0A%0ASaludos%2C%0A${encodeURIComponent(lead.nombre)}" class="btn btn-primary no-print">Agendar sesión estratégica gratuita <span class="btn-arrow">→</span></a>
+        <a href="https://calendly.com/juan-indigotalenthub/30min" target="_blank" class="btn btn-primary no-print">Agendar sesión estratégica gratuita <span class="btn-arrow">→</span></a>
         <button class="btn btn-ghost print-btn no-print" onclick="window.print()">Descargar reporte en PDF</button>
       </div>
     </div>
