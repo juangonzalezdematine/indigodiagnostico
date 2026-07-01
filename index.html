@@ -262,16 +262,16 @@
       ============================================================ */
   @media print{
     @page {
-      margin: 0; /* Borra fecha, hora, título y URL automáticos de los navegadores */
+      margin: 0;
     }
     body{
-      background: var(--cream) !important; /* Fuerza a mantener el fondo original crema */
-      padding: 50px 40px; /* Margen de cortesía para que respire al imprimirse */
+      background: var(--cream) !important;
+      padding: 50px 40px;
       -webkit-print-color-adjust: exact !important; 
       print-color-adjust: exact !important;
     }
     .topbar, .progress, .no-print, .cta-buttons {
-      display: none !important; /* Oculta barras interactivas y botoneras de acción web */
+      display: none !important;
     }
     .container{
       padding: 0;
@@ -280,7 +280,7 @@
     .results-header, .score-block, .report-section, .cta-block{
       box-shadow: var(--shadow) !important;
       border: 1px solid var(--line) !important;
-      page-break-inside: avoid; /* Bloquea cortes feos de párrafos entre hojas */
+      page-break-inside: avoid;
     }
     .score-block{
       background: var(--navy) !important;
@@ -288,7 +288,6 @@
     .cta-block {
       background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%) !important;
     }
-    /* Mantiene los colores corporativos de los gráficos de barra en el PDF */
     .breakdown-item-graph { background: #fff !important; border: 1px solid var(--line) !important; }
     .b-graph-track { background: rgba(3, 5, 54, 0.06) !important; }
     .bar-madura { background: #1f6b46 !important; }
@@ -369,262 +368,12 @@
 
 <script>
 /* ============================================================
-   DATA: Segmentación + 9 preguntas + bloques
-   ============================================================ */
-
-const SEGMENTACION = [
-  {
-    id:'industria',
-    label:'¿En qué industria opera tu empresa?',
-    type:'select',
-    options:[
-      {v:'tech', t:'Tecnología, Fintech, EdTech y Soluciones Digitales'},
-      {v:'servicios', t:'Servicios Profesionales (Consultoría, Legal, Agencias, BPO, IT)'},
-      {v:'retail', t:'Retail, E-commerce y Logística (última milla, distribution)'},
-      {v:'consumo', t:'Consumo Masivo y Manufactura Liviana'},
-      {v:'energia', t:'Energía, Minería, Infraestructura, Servicios Públicos e Industria Pesada'},
-      {v:'pharma', t:'Pharma, Salud y Biotecnología'},
-      {v:'banca', t:'Banca, Finanzas Tradicionales y Seguros'},
-      {v:'otro', t:'Otro'},
-    ]
-  },
-  {
-    id:'tamano',
-    label:'¿Cuál es el tamaño de tu empresa?',
-    type:'select',
-    options:[
-      {v:'s1', t:'Hasta 50 empleados'},
-      {v:'s2', t:'Entre 50 y 100 empleados'},
-      {v:'s3', t:'Entre 101 y 250 empleados'},
-      {v:'s4', t:'Entre 251 y 500 empleados'},
-      {v:'s5', t:'Más de 500 empleados'},
-    ]
-  },
-  {
-    id:'rol',
-    label:'¿Cuál es tu rol en la organización?',
-    type:'select',
-    options:[
-      {v:'fundador', t:'Dueño / Fundador'},
-      {v:'ceo', t:'CEO / Director General / C-Level'},
-      {v:'rrhh', t:'Director / Gerente de RR.HH.'},
-    ]
-  },
-];
-
-const PREGUNTAS = [
-  {
-    id:'q1', area:'Reclutamiento y Selección',
-    title:'Reclutamiento y Selección',
-    text:'Pensando en time-to-hire y atracción de talento, ¿cuál de estas frases describe mejor tu reality hoy?',
-    options:[
-      {tag:'Madura', class:'madura', points:3, text:'Contamos con procesos ágiles apoyados en tecnología (ATS/IA), un employer branding sólido y cubrimos las vacantes clave a tiempo con talento alineado a la cultura.'},
-      {tag:'Intermedia', class:'intermedia', points:2, text:'Cubrimos las posiciones, pero el proceso suele ser reactivo, largo, con comunicación poco fluida y dependemos excesivamente de consultoras externas para perfiles críticos.'},
-      {tag:'Crítica', class:'critica', points:1, text:'No hay un proceso generalizado, nos cuesta atraer talento calificado, los procesos duran muchísimo, la comunicación entre áreas es casi nula y sufrimos caídas durante el proceso, en la oferta o en los primeros 90 días.'},
-      {tag:'Especial', class:'especial', points:2, flag:'sinNecesidad', text:'Sin necesidad activa: la empresa funciona a capacidad plena con su estructura consolidada y no presenta necesidades activas de incorporación en el corto plazo.'},
-    ]
-  },
-  {
-    id:'q2', area:'Rotación y Retención',
-    title:'Rotación y Retención de Talento',
-    text:'Sobre cómo se mueve (o no) el talento dentro de tu organización, ¿con cuál te identificás más?',
-    options:[
-      {tag:'Madura', class:'madura', points:3, text:'La rotación está bajo control (dentro del target de la industria), medimos las causas reales de salida y ejecutamos planes preventivos de retención.'},
-      {tag:'Intermedia', class:'intermedia', points:2, text:'Monitoreamos el índice de rotación, pero reaccionamos cuando el talento clave ya presentó su renuncia. Las salidas nos toman por sorpresa.'},
-      {tag:'Crítica', class:'critica', points:1, text:'Sufrimos una fuga constante de know-how en posiciones estratégicas. No tenemos claridad de por qué se va la gente y el costo de reemplazarla afecta el margen del negocio.'},
-      {tag:'Especial', class:'especial', points:2, flag:'rotacionPasiva', text:'Baja rotación pasiva: prácticamente no tenemos rotación, principalmente por estabilidad salarial o dotación envejecida y de alta antigüedad, más que por una gestión activa.'},
-    ]
-  },
-  {
-    id:'q3', area:'Clima, Cultura y Compromiso',
-    title:'Clima, Cultura y Compromiso',
-    text:'En relación al pulso interno de tu organización, ¿qué describe mejor cómo lo gestionan?',
-    options:[
-      {tag:'Madura', class:'madura', points:3, text:'Evaluamos el pulso de la organización constantemente (eNPS/clima), y los líderes accionan planes concretos junto a sus equipos para mantener el compromiso alto.'},
-      {tag:'Intermedia', class:'intermedia', points:2, text:'Realizamos la típica encuesta anual de clima. Compartimos los resultados, pero los planes de acción se diluyen a los pocos meses por la urgencia del día a día.'},
-      {tag:'Crítica', class:'critica', points:1, text:'No medimos el clima o el ambiente se percibe tenso. El burnout y la falta de compromiso son evidentes, impactando directamente en la productividad.'},
-      {tag:'Especial', class:'especial', points:2, flag:'climaOrganico', text:'Orgánica: no hacemos mediciones formales de clima ni cultura, pero se percibe un buen ambiente y las relaciones diarias fluyen de manera saludable.'},
-    ]
-  },
-  {
-    id:'q4', area:'Presupuesto y ROI de RR.HH.',
-    title:'Presupuesto y Decisiones Basadas en Datos',
-    text:'Sobre cómo se planifica y mide la inversión en gestión de personas:',
-    options:[
-      {tag:'Madura', class:'madura', points:3, text:'El presupuesto de RR.HH. se asigna estratégicamente (balanceando compensación, desarrollo y bienestar) y medimos el retorno con indicadores claros (People Analytics).'},
-      {tag:'Intermedia', class:'intermedia', points:2, text:'El presupuesto se calcula repitiendo el del año anterior con ajustes por inflación. RR.HH. es visto más como un centro de costos operativo que estratégico.'},
-      {tag:'Crítica', class:'critica', points:1, text:'No existe un presupuesto formal para la gestión de personas. Cada iniciativa o ajuste salarial requiere una negociación reactiva y desgastante con Finanzas.'},
-    ]
-  },
-  {
-    id:'q5', area:'Desarrollo y Liderazgo',
-    title:'Desarrollo, Reskilling y Liderazgo',
-    text:'Pensando en cómo se forma y se proyecta al equipo hacia adelante:',
-    options:[
-      {tag:'Madura', class:'madura', points:3, text:'Contamos con planes de sucesión para puestos clave y programas activos para actualizar las competencias del equipo frente a los avances tecnológicos y del mercado.'},
-      {tag:'Intermedia', class:'intermedia', points:2, text:'Hay capacitaciones puntuales e individuales para responder a demandas de negocio específicas, pero sin un plan de desarrollo estructurado ni una línea de sucesión clara.'},
-      {tag:'Crítica', class:'critica', points:1, text:'No existen planes de carrera ni evaluaciones de desempeño. Los líderes gestionan "como pueden" y los colaboradores manifiestan estancamiento profesional.'},
-    ]
-  },
-  {
-    id:'q6', area:'Dinámica del Headcount',
-    title:'Dinámica y Evolución del Headcount',
-    text:'¿Cuál es la situación actual de tu dotación?',
-    contextOnly:true,
-    options:[
-      {tag:'Estable', class:'especial', points:0, value:'estable', text:'Estable: nos mantenemos sin cambios abruptos en la dotación; la estructura actual responde bien al ritmo del negocio.'},
-      {tag:'Crecimiento', class:'especial', points:0, value:'crecimiento', text:'Crecimiento o adquisición: estamos en expansión acelerada o integrando equipos por fusiones/adquisiciones, lo que desafía nuestra capacidad de absorción cultural.'},
-      {tag:'Reestructuración', class:'especial', points:0, value:'decrecimiento', text:'Decrecimiento o reestructuración: atravesamos o estamos en proceso de reducción de estructura, desvinculaciones o salidas de líneas de negocio, con foco en eficiencia operativa.'},
-    ]
-  },
-  {
-    id:'q7', area:'Madurez de Procesos',
-    title:'Madurez de Procesos Generales de RR.HH.',
-    text:'¿Cómo describirías los procesos centrales de RR.HH. (ingresos, licencias, evaluaciones, salidas)?',
-    options:[
-      {tag:'Madura', class:'madura', points:3, text:'Estratégicos y automatizados: los procesos principales corren de manera fluida, están digitalizados y generan impacto positivo directo en la experiencia del colaborador.'},
-      {tag:'Intermedia', class:'intermedia', points:2, text:'Operativos e inocuos: funcionan internamente y se cumple con lo legal, pero son percibidos como transaccionales; no mueven la aguja ni aportan valor percibido al negocio.'},
-      {tag:'Crítica', class:'critica', points:1, text:'Burocráticos o deficientes: los procesos son lentos, manuales o directamente no funcionan, generando fricciones constantes y sobrecarga administrativa en líderes y equipos.'},
-    ]
-  },
-  {
-    id:'q8', area:'Alineamiento Estratégico',
-    title:'Alineamiento Estratégico del Equipo de RR.HH.',
-    text:'¿Qué rol juega el área de personas frente a la mesa directiva?',
-    options:[
-      {tag:'Madura', class:'madura', points:3, text:'Socio estratégico (Business Partner): el equipo de RR.HH. entiende a fondo el negocio, habla el lenguaje de los números y codiseña la estrategia junto a la mesa directiva.'},
-      {tag:'Intermedia', class:'intermedia', points:2, text:'Funcional / reactivo: RR.HH. está alineado a las necesidades operativas de las áreas y responde bien cuando se lo solicita, pero rara vez propone iniciativas proactivas.'},
-      {tag:'Crítica', class:'critica', points:1, text:'Aislado administrativo: muy enfocado en soporte, liquidación y relaciones laborales rígidas, con una desconexión evidente respecto a los objetivos de facturación y mercado.'},
-    ]
-  },
-  {
-    id:'q9', area:'Planificación de Negocio',
-    title:'Planificación del Negocio y Capacidad del Talento',
-    text:'Sobre la conexión entre los objetivos del negocio y la planificación de la estructura:',
-    options:[
-      {tag:'Madura', class:'madura', points:3, text:'La estrategia de negocio a mediano plazo está clara y RR.HH. ya tiene proyectadas las capacidades, roles y competencias que el equipo necesitará para cumplir esos objetivos.'},
-      {tag:'Intermedia', class:'intermedia', points:2, text:'Sabemos hacia dónde va el negocio este año, los objetivos comerciales son claros, pero planificamos la necesidad de personal "sobre la marcha", cuando los cuellos de botella ya aparecieron.'},
-      {tag:'Crítica', class:'critica', points:1, text:'Vivimos en el cortísimo plazo. Los objetivos cambian frecuentemente según la coyuntura y no hay conexión real entre las metas de facturación y la estructura del equipo.'},
-    ]
-  },
-];
-
-const BLOQUES_INDUSTRIA = {
-  tech:{
-    titulo:'Tecnología, Fintech y Soluciones Digitales',
-    texto:'En este 2026, el mercado tecnológico exige una eficiencia operativa extrema tras la consolidación de la inteligencia artificial. El dolor principal ya no es contratar masivamente, sino la escasez crítica de perfiles hiperespecializados (IA, Data Avanzada y Ciberseguridad) combinada con la presión de presupuestos locales frente a ofertas globales. Mantener el compromiso de equipos remotos o híbridos en un entorno de alta exigencia requiere esquemas de compensación total ultra flexibles. Si tu diagnóstico arroja procesos reactivos o falta de datos, la velocidad de disrupción del sector puede dejarte fuera de juego muy rápido.'
-  },
-  services:{
-    titulo:'Servicios Profesionales',
-    texto:'En las empresas de servicios, el talento es el producto. En 2026, el sector enfrenta un fuerte burnout de los mandos medios y la necesidad urgente de rediseñar los modelos de negocio tradicionales debido a la automatización de tareas básicas. Tu principal desafío es lograr que los profesionales de alto valor no se desgasten en la operación transaccional, al mismo tiempo que acelerás el desarrollo de habilidades consultivas complejas. Desatender el clima o mantener un RR.HH. puramente administrativo equivale directamente a perder cuentas clave que se mudan con las personas que las atienden.'
-  },
-  retail:{
-    titulo:'Retail, E-commerce y Logística',
-    texto:'La realidad de tu industria en 2026 está marcada por la omnicanalidad instantánea y la robotización de centros de distribución. Tu dolor de personas más agudo es la altísima rotación y el ausentismo crónico en la primera línea operativa (tiendas, repartidores, operarios de depósito). Si tu estrategia de atracción no es ágil o tu comunicación interna falla, el costo oculto de reclutamiento constante y la baja productividad en el punto de entrega erosionarán tus márgenes, afectando de forma directa la experiencia del cliente final y la rentabilidad del negocio.'
-  },
-  consumo:{
-    titulo:'Consumo Masivo y Manufactura Liviana',
-    texto:'Las empresas productoras enfrentan en 2026 una fuerte presión inflacionaria en costos de materias primas y complejas negociaciones sindicales en planta. El desafío de RR.HH. es doble: debés mantener la paz social y la eficiencia en las líneas de producción estables, mientras acelerás el reskilling digital del equipo comercial y de marketing para los nuevos canales de venta directa. Si la gestión de personas sigue siendo un centro de costos reactivo, te costará atraer a los perfiles profesionales modernos y perderás competitividad en las góndolas.'
-  },
-  energia:{
-    titulo:'Energía, Minería, Infraestructura e Industria Pesada',
-    texto:'Las industrias de capital intensivo, infraestructura y servicios públicos viven en 2026 la mayor tensión de su historia: la reconversión tecnológica de estructuras operativas tradicionales. Tu principal desafío de personas no es solo el recambio generacional, sino la digitalización y automatización de procesos clave conviviendo con estructuras sindicales fuertes y la necesidad de mantener la paz social. Si la gestión de personas sigue siendo reactiva e inercial, la resistencia interna al cambio cultural y la obsolescencia de habilidades operativas se convierten en el principal freno para la modernización y la eficiencia del negocio.'
-  },
-  pharma:{
-    titulo:'Pharma, Salud y Biotecnología',
-    texto:'Tu industria opera bajo un marco de regulación y compliance extremo. En 2026, el principal dolor de talento es la convivencia de dos realidades dispares: la retención de perfiles científicos/médicos ultra especializados con lógicas de mercado global, y la gestión de la fuerza de ventas o personal administrativo tradicional. Si tus procesos de RR.HH. son percibidos como burocráticos o inocuos, ralentizarás los tiempos de aprobación y lanzamiento de productos, perdiendo terreno frente a competidores más dinámicos.'
-  },
-  banca:{
-    titulo:'Banca, Finanzas Tradicionales y Seguros',
-    texto:'El sector financiero tradicional se encuentra en medio de una reestructuración profunda y dolorosa debido a la digitalización masiva. Tu dolor de personas número uno es el reskilling o la salida ordenada de miles de empleados cuyas tareas operativas quedaron obsoletas, mientras intentás asimilar una cultura ágil que atraiga al talento digital que hoy prefiere las Fintech. Si RR.HH. se mantiene aislado en tareas de soporte legal y liquidación, la resistencia al cambio cultural frenará la transformación digital que exige el negocio para sobrevivir.'
-  },
-  otro:{
-    titulo:'Tu sector',
-    texto:'En 2026, prácticamente toda industria atraviesa una tensión común: la convivencia de estructuras tradicionales con la presión de digitalizar, automatizar y atraer talento más joven en un contexto de costos crecientes. Cuanto más reactiva sea tu gestión de personas, mayor es el riesgo de quedar atrás. La buena noticia es que el diagnóstico que acabás de hacer te muestra exactamente dónde están los puntos críticos a accionar primero.'
-  },
-};
-
-const BLOQUES_TAMANO = {
-  s1:{
-    titulo:'Hasta 50 empleados — Estructura centralizada',
-    texto:'En organizaciones de este tamaño, el crecimiento depende casi exclusivamente de la impronta y la agenda de los fundadores. El desafío estructural inmediato es profesionalizar las bases de la gestión de personas sin perder la agilidad ni burocratizar la empresa. Estás en el momento exacto para delegar la operación del día a día e implementar procesos claros de atracción y ordenamiento interno antes de que la cultura original se rompa por el crecimiento.'
-  },
-  s2:{
-    titulo:'Entre 50 y 100 empleados — El puente organizacional',
-    texto:'Te encontrás en la etapa de transición más desafiante para una empresa: el salto hacia la profesionalización. Las dinámicas de comunicación directa del dueño ya no alcanzan y el área de personas suele estar desbordada atendiendo temas administrativos. Tu gran reto aquí es estructurar y empoderar a los mandos medios. Si tus líderes de equipo no están capacitados para gestionar personas y el clima diario, se convertirán en el principal cuello de botella para cumplir las metas del negocio.'
-  },
-  s3:{
-    titulo:'Entre 101 y 250 empleados — Alineación y datos',
-    texto:'Con una plantilla de esta escala, la distancia entre la mesa directiva y el colaborador de a pie se agranda visiblemente. El dolor estructural de esta etapa es la falta de equidad interna (escalas salariales difusas) y la aparición de fricciones entre áreas. Necesitás dejar atrás las decisiones basadas en la intuición e incorporar herramientas de People Analytics y estructuras de compensación claras para liderar la organización con datos objetivos y consistentes.'
-  },
-  s4:{
-    titulo:'Entre 251 y 500 empleados — Derribando silos',
-    texto:'A este nivel, la organización corre el riesgo inminente de "aislarse": que cada departamento funcione como una isla independiente con sus propias subculturas. El área de Capital Humano requiere subespecialidades internas claras (Atracción, Desarrollo, Compensaciones). Tu foco principal como líder debe estar en garantizar una experiencia de empleado homogénea y robustecer los planes de sucesión, asegurando que el negocio no se detenga si una pieza clave decide moverse.'
-  },
-  s5:{
-    titulo:'Más de 500 empleados — Complejidad corporativa',
-    texto:'Manejás una corporación con una complejidad estructural elevada, donde las políticas y procesos ya existen pero suelen volverse rígidos o excesivamente lentos. Tu desafío actual es lograr la personalización de la experiencia del colaborador a escala y flexibilizar las estructuras. Necesitás tecnología que elimine la carga administrativa de los líderes y un RR.HH. posicionado firmemente como Business Partner para que la burocracia interna no asfixie la innovación y el compromiso de los equipos.'
-  },
-};
-
-const BLOQUES_HEADCOUNT = {
-  estable:{
-    titulo:'Estructura estable',
-    texto:'Tu dotación está en un momento stable, sin movimientos abruptos. Es una posición valiosa para trabajar en profundidad sobre la calidad de los procesos, el desarrollo del talento existente y la planificación de mediano plazo, antes de que un cambio externo o interno te obligue a reaccionar.'
-  },
-  crecimiento:{
-    titulo:'Crecimiento o integración acelerada',
-    texto:'Estás creciendo o integrando equipos. Este es el contexto donde la cultura se diluye más rápido y donde los procesos de onboarding, liderazgo intermedio y comunicación interna se transforman en variables críticas. Si no se aceleran al mismo ritmo que la dotación, el riesgo es romper la cultura que te trajo hasta acá.'
-  },
-  decrecimiento:{
-    titulo:'Reestructuración o reducción',
-    texto:'Estás transitando una reducción o reestructuración. El foco aquí no es solo la salida ordenada sino la gestión del talento que queda: el "survivor syndrome" puede impactar fuerte en el compromiso y la productividad de quienes se quedan. Trabajar el clima, redefinir roles y comunicar el nuevo norte son acciones que no pueden quedar para después.'
-  },
-};
-
-const BLOQUES_PERFIL = {
-  critico:{
-    titulo:'Perfil General Crítico',
-    rango:'8 a 13 puntos',
-    texto:'Tu diagnóstico muestra que la gestión de personas hoy está actuando más como freno que como motor del negocio. Hay áreas clave funcionando de manera reactiva o directamente inexistente. La buena noticia: estás a tiempo, y los movimientos correctos en los próximos 90 días pueden cambiar la curva. La mala: si seguís postergando, el costo (de rotación, productividad y oportunidades perdidas) ya está impactando el margen, aunque todavía no lo veas en el P&L.'
-  },
-  intermedio:{
-    titulo:'Perfil General Intermedio',
-    rango:'14 a 19 puntos',
-    texto:'Tu organización tiene bases razonables de gestión de personas, pero está atrapada en un nivel funcional/operativo: hace lo que tiene que hacer, pero no apalanca el negocio. Es el perfil más común y, paradójicamente, el más riesgoso: te sentís "bien" mientras tu competencia más madura te saca ventaja semana a semana. El próximo salto no es trabajar más, es trabajar distinto.'
-  },
-  maduro:{
-    titulo:'Perfil General Maduro',
-    rango:'20 a 24 puntos',
-    texto:'Tu gestión de personas está jugando en la primera división. Los procesos corren, los líderes accionan, los datos están sobre la mesa y RR.HH. forma parte de la conversación estratégica. El desafío en este nivel no es ponerse al día sino sostener la madurez sin perder agilidad, y profundizar en frentes específicos (analítica avanzada, sucesión, compensación total flexible) que separan a las empresas buenas de las realmente memorables.'
-  },
-};
-
-const FLAGS_TEXTOS = {
-  sinNecesidad:{
-    label:'Flag activado · Sin necesidad activa de incorporación',
-    texto:'Que tu estructura actual esté consolidada y sin búsquedas abiertas es una posición cómoda, pero no te confíes. En el mercado actual, la inacción en marca empleadora destruye tu capacidad de atracción futura. Es el momento ideal para diseñar tu base de talento de reserva (talent pool) antes de que surja una baja inesperada.'
-  },
-  rotacionPasiva:{
-    label:'Flag activado · Rotación pasiva',
-    texto:'¡Alerta! Una baja rotación basada en la antigüedad de la dotación o la estabilidad salarial puede ser una trampa silenciosa. Esto suele esconder un fenómeno de "rotación latente" o estancamiento cultural, donde el equipo no se va pero tampoco empuja la innovación. El riesgo de resistencia al cambio tecnológico es elevado.'
-  },
-  climaOrganico:{
-    label:'Flag activado · Clima orgánico sin medición',
-    texto:'Es positivo que las relaciones diarias fluyan de forma saludable de manera natural, pero la intuición no es escalable. Cuando la empresa sume estructura o atraviese una crisis de mercado, la falta de datos formales sobre el clima te impedirá tomar decisiones preventivas. Lo que no se mide, no se puede mejorar de forma sostenible.'
-  },
-};
-
-/* ============================================================
-   GOOGLE APPS SCRIPT INTEGRATION (URL ACTUALIZADA DE 18 COLUMNAS)
+   Sincronización con base de datos de Google Sheets
    ============================================================ */
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby_Oh4ymgEnkj6Ogr5KepqoZkLjAd7zTr9qx90DPq5aEdiUARrYVLN450qOodXK0Vch/exec';
 
 async function sendToSheet(payload){
-  if(APPS_SCRIPT_URL === 'PEGAR_AQUI_TU_URL'){
-    console.warn('[Sheet] URL no configurado — los datos no se están guardando.');
-    return;
-  }
+  if(APPS_SCRIPT_URL === 'PEGAR_AQUI_TU_URL') return;
   try{
     await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
@@ -638,15 +387,64 @@ async function sendToSheet(payload){
 }
 
 /* ============================================================
-   STATE + FLOW
+   DATA CORE
    ============================================================ */
+const SEGMENTACION = [
+  { id:'industria', label:'¿En qué industria opera tu empresa?', type:'select', options:[{v:'tech', t:'Tecnología, Fintech, EdTech y Soluciones Digitales'},{v:'servicios', t:'Servicios Profesionales (Consultoría, Legal, Agencias, BPO, IT)'},{v:'retail', t:'Retail, E-commerce y Logística (última milla, distribution)'},{v:'consumo', t:'Consumo Masivo y Manufactura Liviana'},{v:'energia', t:'Energía, Minería, Infraestructura, Servicios Públicos e Industria Pesada'},{v:'pharma', t:'Pharma, Salud y Biotecnología'},{v:'banca', t:'Banca, Finanzas Tradicionales y Seguros'},{v:'otro', t:'Otro'}] },
+  { id:'tamano', label:'¿Cuál es el tamaño de tu empresa?', type:'select', options:[{v:'s1', t:'Hasta 50 empleados'},{v:'s2', t:'Entre 50 y 100 empleados'},{v:'s3', t:'Entre 101 y 250 empleados'},{v:'s4', t:'Entre 251 y 500 empleados'},{v:'s5', t:'Más de 500 empleados'}] },
+  { id:'rol', label:'¿Cuál es tu rol en la organización?', type:'select', options:[{v:'fundador', t:'Dueño / Fundador'},{v:'ceo', t:'CEO / Director General / C-Level'},{v:'rrhh', t:'Director / Gerente de RR.HH.'}] }
+];
 
-const state = {
-  step:0,
-  total: SEGMENTACION.length + PREGUNTAS.length, 
-  answers:{},  
-  lead:{},
+const PREGUNTAS = [
+  { id:'q1', area:'Reclutamiento y Selección', title:'Reclutamiento y Selección', text:'Pensando en time-to-hire y atracción de talento, ¿cuál de estas frases describe mejor tu realidad hoy?', options:[{tag:'Madura', class:'madura', points:3, text:'Contamos con procesos ágiles apoyados en tecnología (ATS/IA), un employer branding sólido y cubrimos las vacantes clave a tiempo con talento alineado a la cultura.'},{tag:'Intermedia', class:'intermedia', points:2, text:'Cubrimos las posiciones, pero el proceso suele ser reactivo, largo, con comunicación poco fluida y dependemos excesivamente de consultoras externas para perfiles críticos.'},{tag:'Crítica', class:'critica', points:1, text:'No hay un proceso generalizado, nos cuesta atraer talento calificado, los procesos duran muchísimo, la comunicación entre áreas es casi nula y sufrimos caídas durante el proceso.'},{tag:'Especial', class:'especial', points:2, flag:'sinNecesidad', text:'Sin necesidad activa: la empresa funciona a capacidad plena con su estructura consolidada y no presenta necesidades activas.'}] },
+  { id:'q2', area:'Rotación y Retención', title:'Rotación y Retención de Talento', text:'Sobre cómo se mueve (o no) el talento dentro de tu organización, ¿con cuál te identificás más?', options:[{tag:'Madura', class:'madura', points:3, text:'La rotación está bajo control, medimos las causas reales de salida y ejecutamos planes preventivos de retención.'},{tag:'Intermedia', class:'intermedia', points:2, text:'Monitoreamos el índice de rotación, pero reaccionamos cuando el talento clave ya presentó su renuncia.'},{tag:'Crítica', class:'critica', points:1, text:'Sufrimos una fuga constante de know-how en posiciones estratégicas. El costo de reemplazarla afecta el margen.'},{tag:'Especial', class:'especial', points:2, flag:'rotacionPasiva', text:'Baja rotación pasiva: prácticamente no tenemos rotación, principalmente por estabilidad salarial o dotación envejecida.'}] },
+  { id:'q3', area:'Clima, Cultura y Compromiso', title:'Clima, Cultura y Compromiso', text:'En relación al pulso interno de tu organización, ¿qué describe mejor cómo lo gestionan?', options:[{tag:'Madura', class:'madura', points:3, text:'Evaluamos el pulso de la organización constantemente (eNPS/clima), y los líderes accionan planes concretos.'},{tag:'Intermedia', class:'intermedia', points:2, text:'Realizamos la típica encuesta anual de clima. Compartimos los resultados, pero los planes de acción se diluyen.'},{tag:'Crítica', class:'critica', points:1, text:'No medimos el clima o el ambiente se percibe tenso. El burnout y la falta de compromiso son evidentes.'},{tag:'Especial', class:'especial', points:2, flag:'climaOrganico', text:'Orgánica: no hacemos mediciones formales de clima ni cultura, pero se percibe un buen ambiente diario.'}] },
+  { id:'q4', area:'Presupuesto y ROI de RR.HH.', title:'Presupuesto y Decisiones Basadas en Datos', text:'Sobre cómo se planifica y mide la inversión en gestión de personas:', options:[{tag:'Madura', class:'madura', points:3, text:'El presupuesto de RR.HH. se asigna estratégicamente y medimos el retorno con indicadores claros (People Analytics).'},{tag:'Intermedia', class:'intermedia', points:2, text:'El presupuesto se calcula repitiendo el del año anterior con ajustes por inflación. Centro de costos operativo.'},{tag:'Crítica', class:'critica', points:1, text:'No existe un presupuesto formal para la gestión de personas. Cada iniciativa requiere negociación reactiva.'}] },
+  { id:'q5', area:'Desarrollo y Liderazgo', title:'Desarrollo, Reskilling y Liderazgo', text:'Pensando en cómo se forma y se proyecta al equipo hacia adelante:', options:[{tag:'Madura', class:'madura', points:3, text:'Contamos con planes de sucesión para puestos clave y programas activos para actualizar las competencias.'},{tag:'Intermedia', class:'intermedia', points:2, text:'Hay capacitaciones puntuales e individuales para responder a demandas, pero sin plan estructurado.'},{tag:'Crítica', class:'critica', points:1, text:'No existen planes de carrera ni evaluaciones de desempeño. Los líderes gestionan como pueden.'}] },
+  { id:'q6', area:'Dinámica del Headcount', title:'Dinámica y Evolución del Headcount', text:'¿Cuál es la situación actual de tu dotación?', contextOnly:true, options:[{tag:'Estable', class:'especial', points:0, value:'estable', text:'Estable: nos mantenemos sin cambios abruptos en la dotación; la estructura responde bien.'},{tag:'Crecimiento', class:'especial', points:0, value:'crecimiento', text:'Crecimiento o adquisición: estamos en expansión acelerada o integrando equipos por fusiones.'},{tag:'Reestructuración', class:'especial', points:0, value:'decrecimiento', text:'Decrecimiento o reestructuración: atravesamos o estamos en proceso de reducción de estructura.'}] },
+  { id:'q7', area:'Madurez de Procesos', title:'Madurez de Procesos Generales de RR.HH.', text:'¿Cómo describirías los procesos centrales de RR.HH. (ingresos, licencias, evaluaciones, salidas)?', options:[{tag:'Madura', class:'madura', points:3, text:'Estratégicos y automatizados: los procesos principales corren de manera fluida y están digitalizados.'},{tag:'Intermedia', class:'intermedia', points:2, text:'Operativos e inocuos: funcionan internamente y se cumple con lo legal, pero son percibidos como transaccionales.'},{tag:'Crítica', class:'critica', points:1, text:'Burocráticos o deficientes: los procesos son lentos, manuales o directamente no funcionan.'}] },
+  { id:'q8', area:'Alineamiento Estratégico', title:'Alineamiento Estratégico del Equipo de RR.HH.', text:'¿Qué rol juega el área de personas frente a la mesa directiva?', options:[{tag:'Madura', class:'madura', points:3, text:'Socio estratégico (Business Partner): el equipo de RR.HH. entiende a fondo el negocio y habla números.'},{tag:'Intermedia', class:'intermedia', points:2, text:'Funcional / reactivo: RR.HH. está alineado a las necesidades operativas de las áreas y responde bien.'},{tag:'Crítica', class:'critica', points:1, text:'Aislado administrativo: muy enfocado en soporte, liquidación y relaciones laborales rígidas.'}] },
+  { id:'q9', area:'Planificación de Negocio', title:'Planificación del Negocio y Capacidad del Talento', text:'Sobre la conexión entre los objetivos del negocio y la planificación de la estructura:', options:[{tag:'Madura', class:'madura', points:3, text:'La estrategia de negocio está clara y RR.HH. ya tiene proyectadas las capacidades y roles necesarios.'},{tag:'Intermedia', class:'intermedia', points:2, text:'Sabemos hacia dónde va el negocio este año, pero planificamos la necesidad de personal sobre la marcha.'},{tag:'Crítica', class:'critica', points:1, text:'Vivimos en el cortísimo plazo. Los objetivos cambian frecuentemente según la coyuntura económica.'}] }
+];
+
+const BLOQUES_INDUSTRIA = {
+  tech:{ titulo:'Tecnología, Fintech y Soluciones Digitales', texto:'En este 2026, el mercado exige una eficiencia operativa extrema tras la IA. El dolor es la escasez de perfiles hiperespecializados.' },
+  servicios:{ titulo:'Servicios Profesionales', texto:'El talento es el producto. Se enfrenta un fuerte burnout de mandos medios y la automatización de tareas base.' },
+  retail:{ titulo:'Retail y E-commerce', texto:'Marcado por la omnicanalidad instantánea. Alta rotación y ausentismo crónico en la primera línea operativa.' },
+  consumo:{ titulo:'Consumo Masivo', texto:'Presión de costos de estructura y márgenes ajustados. El foco es mantener la productividad física.' },
+  energia:{ titulo:'Energía e Infraestructura', texto:'Capital intensivo. Reconversión tecnológica conviviendo con la retención de know-how crítico.' },
+  pharma:{ titulo:'Pharma y Salud', texto:'Compliance extremo. Retención de perfiles científicos frente a ofertas globales deslocalizadas.' },
+  banca:{ titulo:'Banca y Finanzas', texto:'Reestructuración profunda por digitalización masiva y reskilling de estructuras tradicionales.' },
+  otro:{ titulo:'Tu sector industrial', texto:'Equilibrio complejo entre costos de estructura crecientes y la presión constante por digitalizar.' }
 };
+
+const BLOQUES_TAMANO = {
+  s1:{ titulo:'Hasta 50 empleados', texto:'Dependencia de los fundadores. El reto es profesionalizar bases sin perder la agilidad de startup.' },
+  s2:{ titulo:'Entre 50 y 100 empleados', texto:'Etapa transición hacia la profesionalización. Las dinámicas directas ya no bastan; toca empoderar mandos medios.' },
+  s3:{ titulo:'Entre 101 y 250 empleados', texto:'La distancia directiva crece. Se exige pasar de decisiones intuitivas a métricas basadas en datos reales.' },
+  s4:{ titulo:'Entre 251 y 500 empleados', texto:'Riesgo de silos departamentales aislados. El foco debe estar en unificar la experiencia del empleado.' },
+  s5:{ titulo:'Más de 500 empleados', texto:'Complejidad estructural elevada. Se requiere tecnología para quitar carga administrativa y actuar estratégicamente.' }
+};
+
+const BLOQUES_HEADCOUNT = {
+  estable:{ titulo:'Estructura estable', texto:'Dotación consolidada. Momento idóneo para optimizar la calidad de procesos y planes de carrera.' },
+  crecimiento:{ titulo:'Crecimiento acelerado', texto:'Expansión. Riesgo latente de dilución cultural acelerada y estrés severo en mandos intermedios.' },
+  decrecimiento:{ titulo:'Reestructuración o eficiencia', texto:'Ajuste de estructura. Crítico cuidar el clima interno y redefinir los roles clave del equipo remanente.' }
+};
+
+const BLOQUES_PERFIL = {
+  critico:{ titulo:'Perfil General Crítico', texto:'La gestión de personas frena el negocio hoy. Movimientos tácticos en los próximos 90 días pueden revertir la curva por completo.' },
+  intermedio:{ titulo:'Perfil General Intermedio', texto:'Bases razonables operativas pero atrapadas en lo administrativo. Toca dar el salto proactivo hacia la mesa estratégica.' },
+  maduro:{ titulo:'Perfil General Maduro', texto:'Gestión de personas en primera división. Procesos fluidos, líderes empoderados y RR.HH. incidiendo en el Board.' }
+};
+
+const FLAGS_TEXTOS = {
+  sinNecesidad:{ label:'Flag activado · Sin necesidad activa', texto:'Que tu estructura esté consolidada es cómodo, pero no te confíes. Diseñá tu base de talento de reserva.' },
+  rotacionPasiva:{ label:'Flag activado · Rotación pasiva', texto:'¡Alerta! Una baja rotación por antigüedad puede esconder estancamiento cultural y resistencia al cambio.' },
+  climaOrganico:{ label:'Flag activado · Clima orgánico', texto:'Es positivo que fluya natural, pero la intuición no es escalable. Necesitás datos para prevenir crisis.' }
+};
+
+const state = { step:0, total: SEGMENTACION.length + PREGUNTAS.length, answers:{}, lead:{} };
 
 function setScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -655,9 +453,7 @@ function setScreen(id){
 }
 
 function startTest(){
-  state.step = 1;
-  renderStep();
-  setScreen('screen-questions');
+  state.step = 1; renderStep(); setScreen('screen-questions');
   document.getElementById('progressWrap').style.display='flex';
   updateProgress();
 }
@@ -678,16 +474,9 @@ function renderStep(){
       <span class="eyebrow">Paso ${state.step} · Contexto</span>
       <h2 class="display">${s.label}</h2>
       <div class="options">
-        ${s.options.map(o => `
-          <button class="option" onclick="selectSegment('${s.id}', '${o.v}', this)">
-            <span class="option-text">${o.t}</span>
-          </button>
-        `).join('')}
+        ${s.options.map(o => `<button class="option" onclick="selectSegment('${s.id}', '${o.v}', this)"><span class="option-text">${o.t}</span></button>`).join('')}
       </div>
-      <div class="q-nav">
-        ${state.step>1 ? '<button class="back" onclick="goBack()">← Volver</button>' : '<span></span>'}
-        <span></span>
-      </div>
+      <div class="q-nav">${state.step>1 ? '<button class="back" onclick="goBack()">← Volver</button>' : '<span></span>'}<span></span></div>
     `;
   } else {
     const qi = i - SEGMENTACION.length;
@@ -697,17 +486,9 @@ function renderStep(){
       <h2 class="display">${q.title}</h2>
       <p style="color:var(--muted);margin:-16px 0 28px;max-width:620px;font-size:15px">${q.text}</p>
       <div class="options">
-        ${q.options.map((o, idx) => `
-          <button class="option" onclick="selectAnswer('${q.id}', ${idx}, this)">
-            <span class="option-tag ${o.class}">${o.tag}</span>
-            <span class="option-text">${o.text}</span>
-          </button>
-        `).join('')}
+        ${q.options.map((o, idx) => `<button class="option" onclick="selectAnswer('${q.id}', ${idx}, this)"><span class="option-tag ${o.class}">${o.tag}</span><span class="option-text">${o.text}</span></button>`).join('')}
       </div>
-      <div class="q-nav">
-        <button class="back" onclick="goBack()">← Volver</button>
-        <span></span>
-      </div>
+      <div class="q-nav"><button class="back" onclick="goBack()">← Volver</button><span></span></div>
     `;
   }
   updateProgress();
@@ -725,37 +506,18 @@ function selectAnswer(qid, optIdx, btnEl){
   btnEl.classList.add('selected');
   const q = PREGUNTAS.find(p=>p.id===qid);
   const o = q.options[optIdx];
-  state.answers[qid] = {
-    points: o.points,
-    tag: o.tag,
-    flag: o.flag || null,
-    value: o.value || null,
-    text: o.text,
-    area: q.area,
-  };
+  state.answers[qid] = { points: o.points, tag: o.tag, flag: o.flag || null, value: o.value || null, text: o.text, area: q.area };
   setTimeout(()=> nextStep(), 220);
 }
 
 function nextStep(){
-  if(state.step < state.total){
-    state.step++;
-    renderStep();
-  } else {
-    setScreen('screen-form');
-    document.getElementById('progressFill').style.width = '95%';
-    document.getElementById('progressText').textContent = `Casi listo · Datos finales`;
-  }
+  if(state.step < state.total){ state.step++; renderStep(); } 
+  else { setScreen('screen-form'); document.getElementById('progressFill').style.width = '95%'; document.getElementById('progressText').textContent = `Casi listo · Datos finales`; }
 }
 
 function goBack(){
-  if(state.step > 1){
-    state.step--;
-    setScreen('screen-questions');
-    renderStep();
-  } else if (state.step === 1) {
-    setScreen('screen-landing');
-    document.getElementById('progressWrap').style.display='none';
-  }
+  if(state.step > 1){ state.step--; setScreen('screen-questions'); renderStep(); } 
+  else if (state.step === 1) { setScreen('screen-landing'); document.getElementById('progressWrap').style.display='none'; }
 }
 
 function submitLead(){
@@ -766,8 +528,7 @@ function submitLead(){
     const field = input.closest('.field');
     field.classList.remove('has-error');
     if(!input.value.trim() || (name==='email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value))){
-      field.classList.add('has-error');
-      valid = false;
+      field.classList.add('has-error'); valid = false;
     }
   });
   if(!valid) {
@@ -775,11 +536,7 @@ function submitLead(){
     if(firstErr) firstErr.scrollIntoView({behavior:'smooth', block:'center'});
     return false;
   }
-  state.lead = {
-    nombre: form.nombre.value.trim(),
-    email: form.email.value.trim(),
-    empresa: form.empresa.value.trim(),
-  };
+  state.lead = { nombre: form.nombre.value.trim(), email: form.email.value.trim(), empresa: form.empresa.value.trim() };
 
   const {total, perfil} = calcScore();
   
@@ -804,32 +561,20 @@ function submitLead(){
   };
   
   sendToSheet(payload);
-
   renderResults();
   setScreen('screen-results');
   document.getElementById('progressWrap').style.display='none';
   return false;
 }
 
-/* ============================================================
-   RESULTS RENDERING
-   ============================================================ */
-
 function calcScore(){
-  let total = 0;
-  const breakdown = [];
+  let total = 0; const breakdown = [];
   PREGUNTAS.forEach(q=>{
     if(q.contextOnly) return; 
     const a = state.answers[q.id];
-    if(a){
-      total += a.points;
-      breakdown.push({area:q.area, tag:a.tag, points:a.points});
-    }
+    if(a){ total += a.points; breakdown.push({area:q.area, tag:a.tag, points:a.points}); }
   });
-  let perfil;
-  if(total <= 13) perfil = 'critico';
-  else if(total <= 19) perfil = 'intermedio';
-  else perfil = 'maduro';
+  let perfil = total <= 13 ? 'critico' : (total <= 19 ? 'intermedio' : 'maduro');
   return {total, perfil, breakdown};
 }
 
@@ -846,87 +591,37 @@ function renderResults(){
   const {total, perfil, breakdown} = calcScore();
   const flags = getFlags();
   const lead = state.lead;
-  const industriaKey = state.answers.industria;
-  const tamanoKey = state.answers.tamano;
-  const headcountVal = state.answers.q6 ? state.answers.q6.value : 'estable';
-
   const perfilBlock = BLOQUES_PERFIL[perfil];
-  const industriaBlock = BLOQUES_INDUSTRIA[industriaKey];
-  const tamanoBlock = BLOQUES_TAMANO[tamanoKey];
-  const headcountBlock = BLOQUES_HEADCOUNT[headcountVal];
-
+  const industriaBlock = BLOQUES_INDUSTRIA[state.answers.industria];
+  const tamanoBlock = BLOQUES_TAMANO[state.answers.tamano];
+  const headcountBlock = BLOQUES_HEADCOUNT[state.answers.q6 ? state.answers.q6.value : 'estable'];
   const fechaHoy = new Date().toLocaleDateString('es-AR',{year:'numeric',month:'long',day:'numeric'});
   
-  const flagsHTML = flags.length
-    ? flags.map(f => `
-        <div class="flag-box">
-          <div class="flag-label">${FLAGS_TEXTOS[f].label}</div>
-          <p>${FLAGS_TEXTOS[f].texto}</p>
-        </div>`).join('')
-    : '';
+  const flagsHTML = flags.length ? flags.map(f => `<div class="flag-box"><div class="flag-label">${FLAGS_TEXTOS[f].label}</div><p>${FLAGS_TEXTOS[f].texto}</p></div>`).join('') : '';
 
   const breakdownHTML = breakdown.map(b => {
     const porcentaje = (b.points / 3) * 100;
-    let colorClase = 'bar-critica';
-    if (b.points === 2) colorClase = 'bar-intermedia';
-    if (b.points === 3) colorClase = 'bar-madura';
-
-    return `
-      <div class="breakdown-item-graph">
-        <div class="b-graph-header">
-          <span class="b-label">${b.area}</span>
-          <span class="b-val">${b.tag} <span class="b-pts">(${b.points}/3 pts)</span></span>
-        </div>
-        <div class="b-graph-track">
-          <div class="b-graph-fill ${colorClase}" style="width: ${porcentaje}%"></div>
-        </div>
-      </div>
-    `;
+    let colorClase = b.points === 1 ? 'bar-critica' : (b.points === 2 ? 'bar-intermedia' : 'bar-madura');
+    return `<div class="breakdown-item-graph"><div class="b-graph-header"><span class="b-label">${b.area}</span><span class="b-val">${b.tag} <span class="b-pts">(${b.points}/3 pts)</span></span></div><div class="b-graph-track"><div class="b-graph-fill ${colorClase}" style="width: ${porcentaje}%"></div></div></div>`;
   }).join('');
 
   document.getElementById('resultsContent').innerHTML = `
     <div class="results-header">
       <span class="eyebrow">Reporte Ejecutivo · Indigo Talent Hub</span>
       <h1>${lead.nombre}, este es el diagnóstico de ${lead.empresa}.</h1>
-      <div class="meta-row">
-        <span><strong>Fecha:</strong> ${fechaHoy}</span>
-        <span><strong>Industria:</strong> ${industriaBlock.titulo}</span>
-        <span><strong>Tamaño:</strong> ${tamanoBlock.titulo.split('—')[0].trim()}</span>
-      </div>
+      <div class="meta-row"><span><strong>Fecha:</strong> ${fechaHoy}</span><span><strong>Industria:</strong> ${industriaBlock.titulo}</span><span><strong>Tamaño:</strong> ${tamanoBlock.titulo.split('—')[0].trim()}</span></div>
     </div>
 
     <div class="score-block">
-      <div class="score-circle">
-        <div class="num">${total}</div>
-        <div class="denom">DE 24</div>
-      </div>
-      <div class="score-info">
-        <div class="label">Resultado general</div>
-        <h2>${perfilBlock.titulo}</h2>
-        <p>${perfilBlock.texto}</p>
-      </div>
+      <div class="score-circle"><div class="num">${total}</div><div class="denom">DE 24</div></div>
+      <div class="score-info"><div class="label">Resultado general</div><h2>${perfilBlock.titulo}</h2><p>${perfilBlock.texto}</p></div>
     </div>
 
-    <div class="report-section">
-      <h3><span class="num">01</span>El contexto de tu sector</h3>
-      <p><strong>${industriaBlock.titulo}.</strong> ${industriaBlock.texto}</p>
-    </div>
+    <div class="report-section"><h3><span class="num">01</span>El contexto de tu sector</h3><p><strong>${industriaBlock.titulo}.</strong> ${industriaBlock.texto}</p></div>
+    <div class="report-section"><h3><span class="num">02</span>Tu momento estructural</h3><p>${tamanoBlock.texto}</p></div>
+    <div class="report-section"><h3><span class="num">03</span>Dinámica actual de tu dotación</h3><p><strong>${headcountBlock.titulo}.</strong> ${headcountBlock.texto}</p></div>
 
-    <div class="report-section">
-      <h3><span class="num">02</span>Tu momento estructural</h3>
-      <p>${tamanoBlock.texto}</p>
-    </div>
-
-    <div class="report-section">
-      <h3><span class="num">03</span>Dinámica actual de tu dotación</h3>
-      <p><strong>${headcountBlock.titulo}.</strong> ${headcountBlock.texto}</p>
-    </div>
-
-    ${flags.length ? `
-    <div class="report-section">
-      <h3><span class="num">04</span>Notas de consultoría específicas</h3>
-      ${flagsHTML}
-    </div>` : ''}
+    ${flags.length ? `<div class="report-section"><h3><span class="num">04</span>Notas de consultoría específicas</h3>${flagsHTML}</div>` : ''}
 
     <div class="report-section">
       <h3><span class="num">${flags.length ? '05' : '04'}</span>Detalle por dimensión</h3>
@@ -939,7 +634,7 @@ function renderResults(){
       <h3>${lead.nombre}, conversemos sobre los próximos 90 días de ${lead.empresa}.</h3>
       <p>Una sesión estratégica de 20 minutos sin costo con el equipo de Indigo Talent Hub, donde traducimos este diagnóstico en un plan de acción concreto, priorizado y a la medida de tu organización.</p>
       <div class="cta-buttons">
-        <a href="https://calendly.com/juan-indigotalenthub/30min" target="_blank" class="btn btn-primary no-print">Agendar sesión estratégica gratuita <span class="btn-arrow">→</span></a>
+        <button onclick="window.open('https://calendly.com/juan-indigotalenthub/30min', '_blank')" class="btn btn-primary no-print">Agendar sesión estratégica gratuita <span class="btn-arrow">→</span></button>
         <button class="btn btn-ghost print-btn no-print" onclick="window.print()">Descargar reporte en PDF</button>
       </div>
     </div>
